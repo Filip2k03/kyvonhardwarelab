@@ -1,22 +1,24 @@
-# Phase 14 — Performance fonts + kit depth
+# Phase 14 — Assist, Scan, 3D build depth
 
 Production: https://lab.thuyakyaw.com
 
-Near-term post–Phase 13 work from `docs/14-ROADMAP.md`.
+Post–Phase 13: local Bench Assist, camera kit scanner, MAO Mark I page, and richer 3D Lab build steps.
 
 ## Steps
 
 | Step | Focus | Status |
 |------|--------|--------|
-| 1 | Language-gated font loading (cut Chrome font intervention) | pending |
-| 2 | Expand 3D Lab kit hotspots linked to catalog | pending |
-| 3 | Curriculum depth for entry lessons | pending |
-| 4 | Handout template polish | pending |
-| 5 | Regression validate + deploy | pending |
+| 1 | Kit visual profiles + local frame analysis + match ranking | done |
+| 2 | Bench Assist local Q&A (`/assist`) | done |
+| 3 | Camera kit scanner (`/scan`) | done |
+| 4 | MAO Mark I website contract (`/mao`) | done |
+| 5 | 3D Lab build steps + taller canvas + Assist/Scan links | done |
+| 6 | Nav, narration, tests, typecheck, build | done |
+| 7 | Deploy production | done — https://lab.thuyakyaw.com |
 
 ## Constraints
 
-- Frontend only
-- Keep localStorage preference schema compatible
-- Keep Three.js lazy-loaded
-- Do not break English-first authoring
+- Frontend only — no TF.js / cloud vision
+- Kit-only MAO parts; never invent matrix / MAX7219
+- Keep Three.js lazy-loaded on `/lab/3d`
+- Camera frames stay on-device

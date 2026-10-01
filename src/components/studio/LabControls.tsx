@@ -59,8 +59,15 @@ export function LabControls() {
     window.dispatchEvent(new Event('kyvon-lab-prefs'))
   }, [prefs, voiceId])
 
-  function update(next: LabPreferences) {
+  function persist(next: LabPreferences) {
+    // Flush before applyLabLanguage may reload (English restore).
+    window.localStorage.setItem(LAB_PREFERENCES_KEY, JSON.stringify({ ...next, voiceId }))
+    window.dispatchEvent(new Event('kyvon-lab-prefs'))
     setPrefs(next)
+  }
+
+  function update(next: LabPreferences) {
+    persist(next)
   }
 
   return (
@@ -191,7 +198,8 @@ export function LabControls() {
                           : 'border border-[var(--color-border)] hover:border-[var(--color-border-strong)]',
                       )}
                       onClick={() => {
-                        update({ ...prefs, language: language.code })
+                        const next = { ...prefs, language: language.code }
+                        persist(next)
                         if (language.code !== prefs.language) applyLabLanguage(language.code)
                       }}
                     >

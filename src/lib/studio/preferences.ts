@@ -70,30 +70,64 @@ export function readLabPreferences(raw: string | null): LabPreferences {
   }
 }
 
+function googleTranslateCookieDomains(): readonly string[] {
+  const host = window.location.hostname
+  const domains = new Set<string>([host, `.${host}`])
+  const parts = host.split('.')
+  if (parts.length >= 2) {
+    const parent = parts.slice(-2).join('.')
+    domains.add(parent)
+    domains.add(`.${parent}`)
+  }
+  return [...domains]
+}
+
+/** Google Translate keeps googtrans on host and parent domains; clear all copies. */
+export function clearGoogleTranslateCookies(): void {
+  const expire = 'Thu, 01 Jan 1970 00:00:00 GMT'
+  document.cookie = `googtrans=; expires=${expire}; path=/`
+  for (const domain of googleTranslateCookieDomains()) {
+    document.cookie = `googtrans=; expires=${expire}; path=/; domain=${domain}`
+  }
+}
+
 function writeGoogleCookie(code: LabLanguageCode): void {
   const value = googleTranslateCookieValue(code)
-  const host = window.location.hostname
   if (!value) {
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-    document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${host}`
+    clearGoogleTranslateCookies()
     return
   }
+  const host = window.location.hostname
   document.cookie = `googtrans=${value}; path=/`
   document.cookie = `googtrans=${value}; path=/; domain=${host}`
 }
 
-export function applyLabLanguage(code: LabLanguageCode): void {
-  writeGoogleCookie(code)
-  document.documentElement.lang = code
-  const combo = document.querySelector<HTMLSelectElement>('.goog-te-combo')
-  if (combo) {
-    combo.value = code === 'en' ? '' : code
-    combo.dispatchEvent(new Event('change'))
-    return
-  }
+function reloadPage(): void {
   try {
     window.location.reload()
   } catch {
     // jsdom does not implement navigation.
   }
+}
+
+/**
+ * Apply screen language via the hidden Google Translate widget.
+ * English must clear cookies and reload — the combo cannot reliably undo DOM translation.
+ */
+export function applyLabLanguage(code: LabLanguageCode): void {
+  writeGoogleCookie(code)
+  document.documentElement.lang = code
+
+  if (code === 'en') {
+    reloadPage()
+    return
+  }
+
+  const combo = document.querySelector<HTMLSelectElement>('.goog-te-combo')
+  if (combo) {
+    combo.value = code
+    combo.dispatchEvent(new Event('change'))
+    return
+  }
+  reloadPage()
 }

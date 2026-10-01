@@ -1,6 +1,7 @@
 import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { PageLoader } from '@/components/ui/LoadingSpinner'
 import { WebGlFallback } from '@/features/lab3d/WebGlFallback'
 import { detectWebGL } from '@/lib/lab3d/detectWebGL'
@@ -29,11 +30,12 @@ export function Lab3dPage() {
         title="3D Lab"
         description={
           <>
-            Orbit the controller and breadboard path. Select pins to jump into the hardware catalog.
-            Assembled, exploded, and isolate views stay on this route — Three.js loads only here.{' '}
+            Walk build steps on the Uno and breadboard: USB, power, digital bank, 220 Ω, LED. Orbit,
+            explode, or isolate hotspots, then jump into Scan or Assist when you need a real part ID.{' '}
             {UNO_BOARD_FALLBACK_SUMMARY}
           </>
         }
+        actions={<PageListenButton />}
       />
 
       {!webgl ? (

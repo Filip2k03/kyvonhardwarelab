@@ -26,7 +26,7 @@ export function resolvePageNarration(pathname: string): PageNarration {
       title: 'Home',
       text: narrateOverview(
         'KYVON Hardware Lab',
-        'Learn the idea, then build it with your hands. Open Learn for lessons, Projects for full builds, Lab for diagrams, Tools for calculators, and Handouts when you want paper at the bench.',
+        'Learn the idea, then build it with your hands. Open Learn for lessons, Scan to identify kit parts with the camera, Assist for local bench answers, three D Lab for build steps, Projects for full builds, and MAO Mark I for the robot contract.',
       ),
     }
   }
@@ -125,7 +125,40 @@ export function resolvePageNarration(pathname: string): PageNarration {
     return {
       id: 'lab3d',
       title: '3D Lab',
-      text: `${UNO_BOARD_FALLBACK_SUMMARY} ${spots}`,
+      text: `${UNO_BOARD_FALLBACK_SUMMARY} Use build steps to walk USB, power, digital pins, resistor, and LED. Assembled, exploded, and isolate views change how the bench separates. ${spots}`,
+    }
+  }
+
+  if (pathname === '/scan') {
+    return {
+      id: 'scan',
+      title: 'Kit scanner',
+      text: narrateOverview(
+        'the kit scanner',
+        'Point the camera at one kit part on a plain background, capture a frame, and confirm the best local catalog match. Nothing leaves your device.',
+      ),
+    }
+  }
+
+  if (pathname === '/assist') {
+    return {
+      id: 'assist',
+      title: 'Bench Assist',
+      text: narrateOverview(
+        'Bench Assist',
+        'Ask about parts, camera scan, three D lab, circuits, lessons, or MAO Mark I. Answers come from local kit data only.',
+      ),
+    }
+  }
+
+  if (pathname === '/mao' || pathname.startsWith('/projects/mao-mark-i')) {
+    return {
+      id: 'mao-lab',
+      title: 'MAO Mark I Hardware Lab',
+      text: narrateOverview(
+        'MAO Mark I Hardware Lab',
+        'Interactive three D workbench for your Uno kit. Simulation mode until a Mac bridge connects. Raw eight by eight matrix and salvaged LCD stay unverified. Open workbench for the D eight LED circuit, build for guided steps, and face lab for the software matrix simulator.',
+      ),
     }
   }
 

@@ -65,7 +65,7 @@ describe('AppRouter', () => {
     expect(within(home.container).getByRole('main')).toBeInTheDocument()
     home.unmount()
 
-    for (const path of ['/learn', '/components', '/lab', '/projects', '/tools', '/progress'] as const) {
+    for (const path of ['/learn', '/components', '/lab', '/projects', '/tools', '/progress', '/scan', '/assist', '/projects/mao-mark-i'] as const) {
       const view = renderAt(path)
       expect(within(view.container).getByRole('main')).toBeInTheDocument()
       view.unmount()

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { UNO_BOARD_HOTSPOTS } from '@/data/lab3d/unoBoard'
 import { findHardwareBySlug } from '@/data/hardware'
 import { detectWebGL } from '@/lib/lab3d/detectWebGL'
+import { LAB3D_BUILD_STEPS } from '@/lib/lab3d/buildSteps'
 import { LAB3D_VIEW_MODES, type Lab3dViewMode } from '@/lib/lab3d/viewModes'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { useInspector } from '@/hooks/useInspector'
@@ -39,21 +40,34 @@ export function Lab3dExperience() {
   const reducedMotion = usePrefersReducedMotion()
   const webgl = useMemo(() => detectWebGL(), [])
   const { setContent } = useInspector()
-  const [selectedId, setSelectedId] = useState<string | null>('digital-bank')
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const [selectedPin, setSelectedPin] = useState<string | null>(null)
   const [resetToken, setResetToken] = useState(0)
   const [runtimeError, setRuntimeError] = useState<string | null>(null)
   const [fullscreen, setFullscreen] = useState(false)
   const [viewMode, setViewMode] = useState<Lab3dViewMode>('assembled')
+  const [activeStepId, setActiveStepId] = useState<string | null>(LAB3D_BUILD_STEPS[0]?.id ?? null)
 
   const selected = UNO_BOARD_HOTSPOTS.find((hotspot) => hotspot.id === selectedId) ?? null
   const catalog = selected?.relatedComponentSlug
     ? findHardwareBySlug(selected.relatedComponentSlug)
     : undefined
+  const activeStep = LAB3D_BUILD_STEPS.find((step) => step.id === activeStepId) ?? null
 
   function selectHotspot(id: string) {
     setSelectedId(id)
     setSelectedPin(null)
+    const step = LAB3D_BUILD_STEPS.find((item) => item.hotspotId === id)
+    if (step) setActiveStepId(step.id)
+  }
+
+  function applyBuildStep(stepId: string) {
+    const step = LAB3D_BUILD_STEPS.find((item) => item.id === stepId)
+    if (!step) return
+    setActiveStepId(step.id)
+    setSelectedId(step.hotspotId)
+    setSelectedPin(null)
+    setViewMode(step.preferredMode)
   }
 
   useEffect(() => {
@@ -62,7 +76,7 @@ export function Lab3dExperience() {
         title: '3D Lab',
         body: (
           <p className="text-sm text-[var(--color-text-muted)]">
-            Select a hotspot to inspect pins and linked catalog parts.
+            Follow build steps or select a hotspot to inspect pins and linked catalog parts.
           </p>
         ),
       })
@@ -75,6 +89,7 @@ export function Lab3dExperience() {
         <div className="space-y-3 text-sm">
           <p className="font-mono-tech text-[10px] tracking-wide text-[var(--color-accent)] uppercase">
             {selected.category} · {viewMode}
+            {activeStep ? ` · step ${activeStep.title}` : ''}
           </p>
           <p className="text-[var(--color-text-muted)]">{selected.summary}</p>
           <p className="font-mono-tech text-xs">{selected.pinNames.join(' · ')}</p>
@@ -95,7 +110,7 @@ export function Lab3dExperience() {
       ),
     })
     return () => setContent(null)
-  }, [selected, selectedPin, catalog, viewMode, setContent])
+  }, [selected, selectedPin, catalog, viewMode, activeStep, setContent])
 
   if (!webgl || runtimeError) {
     return (
@@ -142,6 +157,18 @@ export function Lab3dExperience() {
         >
           {fullscreen ? 'Exit wide view' : 'Wide view'}
         </button>
+        <Link
+          to="/scan"
+          className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-[var(--color-border)] px-3 text-sm text-[var(--color-accent)]"
+        >
+          Scan parts
+        </Link>
+        <Link
+          to="/assist"
+          className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-[var(--color-border)] px-3 text-sm text-[var(--color-accent)]"
+        >
+          Ask Assist
+        </Link>
         {reducedMotion ? (
           <p className="self-center text-xs text-[var(--color-text-muted)]">
             Reduced motion: damping/pulse animation minimized; render-on-demand enabled.
@@ -152,7 +179,7 @@ export function Lab3dExperience() {
       <div
         className={cn(
           'grid gap-4',
-          fullscreen ? 'lg:grid-cols-1' : 'lg:grid-cols-[minmax(0,1.4fr)_minmax(16rem,0.8fr)]',
+          fullscreen ? 'lg:grid-cols-1' : 'lg:grid-cols-[minmax(0,1.45fr)_minmax(17rem,0.85fr)]',
         )}
       >
         <Lab3dErrorBoundary onError={setRuntimeError}>
@@ -165,6 +192,36 @@ export function Lab3dExperience() {
           />
         </Lab3dErrorBoundary>
         <div className="space-y-3">
+          <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
+            <h2 className="text-xs font-semibold tracking-wide text-[var(--color-text-muted)] uppercase">
+              Build steps
+            </h2>
+            <ol className="mt-2 space-y-1">
+              {LAB3D_BUILD_STEPS.map((step, index) => (
+                <li key={step.id}>
+                  <button
+                    type="button"
+                    onClick={() => applyBuildStep(step.id)}
+                    className={cn(
+                      'flex min-h-11 w-full flex-col rounded-[var(--radius-sm)] px-3 py-2 text-left',
+                      activeStepId === step.id
+                        ? 'bg-[var(--color-surface-raised)] ring-1 ring-[var(--color-accent)]'
+                        : 'hover:bg-[var(--color-surface-raised)]',
+                    )}
+                  >
+                    <span className="text-sm font-medium">
+                      <span className="font-mono-tech text-[10px] text-[var(--color-accent)]">
+                        {index + 1}.
+                      </span>{' '}
+                      {step.title}
+                    </span>
+                    <span className="mt-0.5 text-xs text-[var(--color-text-muted)]">{step.detail}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+
           <HotspotInfoPanel
             hotspot={selected}
             selectedPin={selectedPin}

@@ -29,8 +29,14 @@ export function DashboardPage() {
             <Link to={continueTo} className="lab-btn-primary">
               {continueLabel}
             </Link>
-            <Link to="/projects" className="lab-btn-ghost">
-              Projects
+            <Link to="/scan" className="lab-btn-ghost">
+              Scan kit
+            </Link>
+            <Link to="/assist" className="lab-btn-ghost">
+              Assist
+            </Link>
+            <Link to="/lab/3d" className="lab-btn-ghost">
+              3D Lab
             </Link>
             <PageListenButton />
           </>

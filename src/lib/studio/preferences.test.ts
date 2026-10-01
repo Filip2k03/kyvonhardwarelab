@@ -1,13 +1,20 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   LAB_LANGUAGES,
   applyLabLanguage,
   clampDimmer,
+  clearGoogleTranslateCookies,
   googleTranslateCookieValue,
   readLabPreferences,
 } from '@/lib/studio/preferences'
 
 describe('lab preferences', () => {
+  afterEach(() => {
+    clearGoogleTranslateCookies()
+    document.documentElement.lang = 'en'
+    vi.restoreAllMocks()
+  })
+
   it('offers English, Myanmar, Japanese, and Russian', () => {
     expect(LAB_LANGUAGES.map((language) => language.code)).toEqual(['en', 'my', 'ja', 'ru'])
     expect(googleTranslateCookieValue('ja')).toBe('/en/ja')
@@ -28,5 +35,17 @@ describe('lab preferences', () => {
     applyLabLanguage('my')
     expect(document.cookie).toContain('googtrans=/en/my')
     expect(document.documentElement.lang).toBe('my')
+  })
+
+  it('clears translate cookies and reloads when restoring English', () => {
+    document.cookie = 'googtrans=/en/my; path=/'
+    const reload = vi.fn()
+    vi.stubGlobal('location', { ...window.location, reload, hostname: 'lab.thuyakyaw.com' })
+
+    applyLabLanguage('en')
+
+    expect(document.cookie).not.toContain('googtrans=/en/my')
+    expect(document.documentElement.lang).toBe('en')
+    expect(reload).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,7 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from '@/app/App'
+import { installTranslateDomGuard } from '@/lib/studio/translateDomGuard'
 import './index.css'
+
+installTranslateDomGuard()
 
 const rootElement = document.getElementById('root')
 

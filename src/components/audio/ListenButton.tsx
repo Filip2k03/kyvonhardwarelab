@@ -37,7 +37,7 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
           onClick={() => listen(id, title, text)}
         >
           <Headphones className="h-4 w-4 text-[var(--color-accent)]" aria-hidden="true" />
-          Listen
+          <span>Listen</span>
         </button>
       ) : null}
 
@@ -48,7 +48,7 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
           onClick={pause}
         >
           <Pause className="h-4 w-4" aria-hidden="true" />
-          Pause
+          <span>Pause</span>
         </button>
       ) : null}
 
@@ -59,7 +59,7 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
           onClick={resume}
         >
           <Play className="h-4 w-4" aria-hidden="true" />
-          Resume
+          <span>Resume</span>
         </button>
       ) : null}
 
@@ -70,13 +70,13 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
           onClick={stop}
         >
           <Square className="h-3.5 w-3.5" aria-hidden="true" />
-          Stop
+          <span>Stop</span>
         </button>
       ) : null}
 
       {busy ? (
         <span className="font-mono-tech text-[11px] text-[var(--color-accent)]" aria-live="polite">
-          {paused ? 'Paused' : 'Speaking'} · female voice
+          <span>{paused ? 'Paused' : 'Speaking'} · female voice</span>
         </span>
       ) : null}
     </div>
@@ -112,7 +112,7 @@ export function PageListenButton({
           aria-label={compact ? 'Listen to this page' : undefined}
         >
           <Headphones className="h-4 w-4 text-[var(--color-accent)]" aria-hidden="true" />
-          {compact ? <span className="sr-only">Listen to this page</span> : 'Listen to this page'}
+          {compact ? <span className="sr-only">Listen to this page</span> : <span>Listen to this page</span>}
         </button>
       ) : status === 'speaking' ? (
         <button
@@ -125,7 +125,7 @@ export function PageListenButton({
           aria-label={compact ? 'Pause narration' : undefined}
         >
           <Pause className="h-4 w-4" aria-hidden="true" />
-          {compact ? <span className="sr-only">Pause</span> : 'Pause'}
+          {compact ? <span className="sr-only">Pause</span> : <span>Pause</span>}
         </button>
       ) : (
         <button
@@ -138,7 +138,7 @@ export function PageListenButton({
           aria-label={compact ? 'Resume narration' : undefined}
         >
           <Play className="h-4 w-4" aria-hidden="true" />
-          {compact ? <span className="sr-only">Resume</span> : 'Resume'}
+          {compact ? <span className="sr-only">Resume</span> : <span>Resume</span>}
         </button>
       )}
       {pageActive ? (
@@ -152,7 +152,7 @@ export function PageListenButton({
           aria-label={compact ? 'Stop narration' : undefined}
         >
           <Square className="h-3.5 w-3.5" aria-hidden="true" />
-          {compact ? <span className="sr-only">Stop</span> : 'Stop'}
+          {compact ? <span className="sr-only">Stop</span> : <span>Stop</span>}
         </button>
       ) : null}
     </div>

@@ -1,21 +1,20 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { Lab3dPage } from '@/features/lab/Lab3dPage'
+import { NarrationProvider } from '@/hooks/NarrationProvider'
 
 vi.mock('@/lib/lab3d/detectWebGL', () => ({
   detectWebGL: () => false,
 }))
 
 describe('Lab3dPage fallback', () => {
-  beforeEach(() => {
-    vi.resetModules()
-  })
-
-  it('renders accessible fallback content when WebGL is unavailable', async () => {
+  it('renders accessible fallback content when WebGL is unavailable', () => {
     render(
       <MemoryRouter>
-        <Lab3dPage />
+        <NarrationProvider>
+          <Lab3dPage />
+        </NarrationProvider>
       </MemoryRouter>,
     )
 

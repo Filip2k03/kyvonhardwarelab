@@ -5,11 +5,13 @@ interface LabPanelProps {
   readonly children: ReactNode
   readonly className?: string
   readonly padded?: boolean
+  readonly id?: string
 }
 
-export function LabPanel({ children, className, padded = true }: LabPanelProps) {
+export function LabPanel({ children, className, padded = true, id }: LabPanelProps) {
   return (
     <div
+      id={id}
       className={cn(
         'lab-panel border border-[var(--color-border)] bg-[var(--color-surface)]',
         padded ? 'p-4' : null,

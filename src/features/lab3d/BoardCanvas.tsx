@@ -97,7 +97,7 @@ export function BoardCanvas({
   viewMode,
 }: BoardSceneProps) {
   return (
-    <div className="relative h-[min(60vh,520px)] w-full overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[#eef1f5]">
+    <div className="relative h-[min(68vh,640px)] w-full overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[#eef1f5]">
       <Canvas
         shadows
         dpr={[1, 1.5]}
@@ -121,7 +121,7 @@ export function BoardCanvas({
         </Suspense>
       </Canvas>
       <p className="pointer-events-none absolute bottom-2 left-2 rounded bg-[var(--color-surface)]/90 px-2 py-1 text-[10px] text-[var(--color-text-muted)]">
-        Drag to orbit · pinch/scroll to zoom · tap hotspots
+        Drag to orbit · pinch/scroll to zoom · click a marker for its name
       </p>
     </div>
   )

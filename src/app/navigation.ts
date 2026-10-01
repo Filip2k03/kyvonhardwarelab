@@ -1,13 +1,16 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   BookOpen,
+  Bot,
   Boxes,
+  Camera,
   CircuitBoard,
   ClipboardList,
   Cpu,
   FolderKanban,
   Gauge,
   Home,
+  BotMessageSquare,
   Wrench,
 } from 'lucide-react'
 
@@ -25,6 +28,9 @@ export const PRIMARY_NAV: readonly NavItem[] = [
   { to: '/components', label: 'Components', icon: Cpu },
   { to: '/lab', label: 'Workbench', icon: CircuitBoard },
   { to: '/lab/3d', label: '3D Lab', icon: Boxes },
+  { to: '/scan', label: 'Scan', icon: Camera },
+  { to: '/assist', label: 'Assist', icon: BotMessageSquare },
+  { to: '/projects/mao-mark-i', label: 'MAO Lab', icon: Bot },
   { to: '/projects', label: 'Projects', icon: FolderKanban },
   { to: '/tools', label: 'Tools', icon: Wrench },
   { to: '/handouts', label: 'Handouts', icon: ClipboardList },
@@ -34,10 +40,10 @@ export const PRIMARY_NAV: readonly NavItem[] = [
 /** Compact mobile bottom bar (subset + overflow via Home). */
 export const MOBILE_NAV: readonly NavItem[] = [
   { to: '/', label: 'Home', icon: Home, end: true },
-  { to: '/learn', label: 'Learn', icon: BookOpen },
-  { to: '/components', label: 'Parts', icon: Cpu },
-  { to: '/lab', label: 'Bench', icon: CircuitBoard },
+  { to: '/scan', label: 'Scan', icon: Camera },
+  { to: '/assist', label: 'Assist', icon: BotMessageSquare },
   { to: '/lab/3d', label: '3D', icon: Boxes },
+  { to: '/projects/mao-mark-i', label: 'MAO', icon: Bot },
 ] as const
 
 /** @deprecated Prefer PRIMARY_NAV — kept empty for older imports. */

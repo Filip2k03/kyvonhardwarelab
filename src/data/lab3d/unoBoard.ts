@@ -15,7 +15,7 @@ export const UNO_BOARD_HOTSPOTS: readonly Lab3dHotspot[] = [
     id: 'usb',
     label: 'USB port',
     category: 'power',
-    position: [-1.15, 0.12, 0],
+    position: [-1.0, 0.5, 0],
     summary: 'USB provides 5V power and a programming/serial link to the host.',
     details:
       'On Uno-class boards, USB both powers the regulator path and exposes a UART bridge for uploads and Serial Monitor. Weak USB ports can brown out when motors stall.',
@@ -27,7 +27,7 @@ export const UNO_BOARD_HOTSPOTS: readonly Lab3dHotspot[] = [
     id: 'power-rails',
     label: '5V / 3.3V / GND',
     category: 'power',
-    position: [0.55, 0.14, 0.55],
+    position: [0.565, 0.38, 0.55],
     summary: 'Regulated rails for modules. Confirm voltage before wiring 3.3V-only parts.',
     details:
       '5V is the common logic rail for this kit’s ATmega328P-class board. 3.3V is useful for RC522-class modules. Always share GND with peripherals.',
@@ -39,7 +39,7 @@ export const UNO_BOARD_HOTSPOTS: readonly Lab3dHotspot[] = [
     id: 'digital-bank',
     label: 'Digital I/O (D0–D13)',
     category: 'digital',
-    position: [0.15, 0.14, -0.55],
+    position: [-0.28, 0.38, -0.55],
     summary: 'General-purpose digital pins, including PWM-capable pins and UART/SPI shared functions.',
     details:
       'D0/D1 double as UART. D10–D13 commonly serve SPI. Several pins support PWM for LEDs and servos. Never exceed pin current limits.',
@@ -50,7 +50,7 @@ export const UNO_BOARD_HOTSPOTS: readonly Lab3dHotspot[] = [
     id: 'analog-bank',
     label: 'Analog inputs (A0–A5)',
     category: 'analog',
-    position: [-0.35, 0.14, 0.55],
+    position: [-0.325, 0.38, 0.55],
     summary: 'ADC inputs for pots, dividers, and analog sensors. A4/A5 also carry I2C.',
     details:
       'Default 10-bit ADC with ~5V reference on classic Uno-class boards. Keep signals within 0..Vref. A4/SDA and A5/SCL are the I2C pair.',
@@ -61,7 +61,7 @@ export const UNO_BOARD_HOTSPOTS: readonly Lab3dHotspot[] = [
     id: 'reset',
     label: 'Reset button',
     category: 'special',
-    position: [0.95, 0.16, -0.35],
+    position: [0.95, 0.26, -0.35],
     summary: 'Hardware reset restarts the MCU without unplugging USB.',
     details:
       'Useful after uploading or when firmware wedges. Holding reset during certain programming flows can help recover boards, depending on bootloader.',
@@ -71,7 +71,7 @@ export const UNO_BOARD_HOTSPOTS: readonly Lab3dHotspot[] = [
     id: 'crystal',
     label: 'Clock crystal region',
     category: 'special',
-    position: [0.35, 0.12, 0.05],
+    position: [0.35, 0.26, 0.05],
     summary: 'Timing reference for the MCU clock domain.',
     details:
       'Stable timing matters for UART baud, servo pulses, and protocol libraries. Treat physical damage to the crystal area as a board-level fault.',
