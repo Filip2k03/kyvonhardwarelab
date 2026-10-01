@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { scoreQuiz } from '@/lib/learn/scoreQuiz'
 import { getAdjacentLessons, prerequisitesMet } from '@/lib/learn/curriculum'
+import {
+  LESSON_FLOW_STAGES,
+  isLessonFlowStage,
+  nextLessonFlowStage,
+  previousLessonFlowStage,
+} from '@/lib/learn/lessonFlow'
 import { CURRICULUM, findLessonBySlug, listLessons } from '@/data/lessons'
 
 describe('curriculum data', () => {
@@ -56,5 +62,20 @@ describe('curriculum helpers', () => {
     expect(prerequisitesMet(leds, new Set(), bySlug)).toBe(false)
     const breadboard = findLessonBySlug('breadboard-fundamentals')
     expect(prerequisitesMet(leds, new Set([breadboard!.id]), bySlug)).toBe(true)
+  })
+})
+
+describe('lesson flow stages', () => {
+  it('orders Learn → Build → Experiment → Challenge', () => {
+    expect(LESSON_FLOW_STAGES.map((stage) => stage.id)).toEqual([
+      'learn',
+      'build',
+      'experiment',
+      'challenge',
+    ])
+    expect(nextLessonFlowStage('learn')).toBe('build')
+    expect(previousLessonFlowStage('challenge')).toBe('experiment')
+    expect(isLessonFlowStage('build')).toBe(true)
+    expect(isLessonFlowStage('theory')).toBe(false)
   })
 })

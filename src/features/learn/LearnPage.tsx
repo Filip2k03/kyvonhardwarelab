@@ -22,7 +22,7 @@ export function LearnPage() {
       <PageHeader
         eyebrow="Curriculum"
         title="Learn"
-        description="Curriculum from electronics fundamentals through ESP32/IoT. Predict before you power. Progress is stored locally in your browser."
+        description="Curriculum from electronics fundamentals through ESP32/IoT. Each lesson follows Learn → Build → Experiment → Challenge. Progress stays in this browser."
       />
 
       <ol className="space-y-2">
