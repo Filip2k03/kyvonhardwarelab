@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { listCircuits } from '@/data/circuits'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SectionTitle } from '@/components/ui/LabPanel'
 
@@ -12,6 +13,7 @@ export function LabPage() {
         eyebrow="Workbench"
         title="Workbench"
         description="Educational wiring diagrams for kit experiments. This is not a SPICE simulator — use it to inspect connections, pins, and safety heuristics before building on a breadboard."
+        actions={<PageListenButton />}
       />
 
       <section className="space-y-3" aria-labelledby="circuits-heading">

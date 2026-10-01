@@ -8,7 +8,7 @@ import {
   looksFemaleVoice,
   pickFemaleVoice,
 } from '@/lib/audio/femaleVoices'
-import { chunkNarration } from '@/lib/audio/speechEngine'
+import { chunkNarration, primeSpeechEngine, speechSupported, warmSpeechEngine } from '@/lib/audio/speechEngine'
 import { chunkForLanguage, langMatchesVoice, speechLangTag } from '@/lib/audio/speechLocales'
 import { narrateLesson, narrateProject, narrateComponent, narrateCircuit } from '@/lib/audio/buildNarration'
 import { resolvePageNarration } from '@/lib/audio/resolvePageNarration'
@@ -86,6 +86,12 @@ describe('narration scripts', () => {
     const chunks = chunkNarration(`${'Sentence one. '.repeat(40)}${'Sentence two. '.repeat(40)}`)
     expect(chunks.length).toBeGreaterThan(1)
     expect(chunks.every((chunk) => chunk.length <= 500)).toBe(true)
+  })
+
+  it('exposes speech support and priming helpers for click-gesture unlock', () => {
+    expect(typeof speechSupported()).toBe('boolean')
+    expect(() => warmSpeechEngine()).not.toThrow()
+    expect(() => primeSpeechEngine()).not.toThrow()
   })
 
   it('resolves page narration for module routes', () => {

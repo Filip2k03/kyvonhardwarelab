@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { listLessons } from '@/data/lessons'
 import { listProjects } from '@/data/projects'
+import { PageListenButton } from '@/components/audio/ListenButton'
 
 export function HandoutsPage() {
   const lessons = listLessons()
@@ -8,12 +9,15 @@ export function HandoutsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Handouts</h1>
-        <p className="max-w-2xl text-sm text-[var(--color-text-muted)]">
-          A4 worksheets for every lesson and project. Open one, then use Print or Save as PDF in
-          the browser. No server-side PDF generator.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight">Handouts</h1>
+          <p className="max-w-2xl text-sm text-[var(--color-text-muted)]">
+            A4 worksheets for every lesson and project. Open one, then use Print or Save as PDF in
+            the browser. No server-side PDF generator.
+          </p>
+        </div>
+        <PageListenButton />
       </header>
 
       <section className="space-y-3" aria-labelledby="lesson-handouts">

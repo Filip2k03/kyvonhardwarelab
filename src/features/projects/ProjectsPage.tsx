@@ -12,6 +12,7 @@ import { useProgress } from '@/hooks/useProgress'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { LabPanel } from '@/components/ui/LabPanel'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { StatusChip } from '@/components/ui/StatusChip'
 
 const CATEGORIES = Object.keys(PROJECT_CATEGORY_LABELS) as ProjectCategory[]
@@ -34,6 +35,7 @@ export function ProjectsPage() {
         eyebrow="Builds"
         title="Projects"
         description="Progressive physical builds from Blink through robotics expansion. BOM items link to the hardware catalog; lesson prerequisites link to Learn."
+        actions={<PageListenButton />}
       />
 
       <LabPanel>

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listLessons } from '@/data/lessons'
 import { listProjects } from '@/data/projects'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { useProgress } from '@/hooks/useProgress'
 import { PROGRESS_STATUS_LABELS } from '@/lib/learn/labels'
 
@@ -29,12 +30,15 @@ export function ProgressPage() {
 
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Progress</h1>
-        <p className="max-w-2xl text-sm text-[var(--color-text-muted)]">
-          Learning history stays on this device. Export a JSON backup anytime. Imports are validated
-          before they replace stored progress.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight">Progress</h1>
+          <p className="max-w-2xl text-sm text-[var(--color-text-muted)]">
+            Learning history stays on this device. Export a JSON backup anytime. Imports are validated
+            before they replace stored progress.
+          </p>
+        </div>
+        <PageListenButton />
       </header>
 
       {storageNotice ? (

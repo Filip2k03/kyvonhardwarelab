@@ -4,10 +4,12 @@ import type { FemaleVoiceId } from '@/lib/audio/femaleVoices'
 import { resolvePageNarration } from '@/lib/audio/resolvePageNarration'
 import {
   pauseSpeech,
+  primeSpeechEngine,
   resumeSpeech,
   speakNarration,
   speechSupported,
   stopSpeech,
+  warmSpeechEngine,
   type SpeechStatus,
 } from '@/lib/audio/speechEngine'
 import {
@@ -41,6 +43,10 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
   const [language, setLanguage] = useState<LabLanguageCode>(() =>
     typeof window === 'undefined' ? DEFAULT_LAB_PREFERENCES.language : readPrefs().language,
   )
+
+  useEffect(() => {
+    warmSpeechEngine()
+  }, [])
 
   useEffect(() => {
     stopSpeech()
@@ -80,11 +86,14 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
         setStatus('unsupported')
         return
       }
+      // Keep Chrome's autoplay/speech unlock tied to this click.
+      primeSpeechEngine()
       const prefs = readPrefs()
       setLanguage(prefs.language)
       setActivePath(location.pathname)
       setActiveId(id)
       setActiveTitle(title)
+      setStatus('speaking')
       void speakNarration({
         text,
         voiceId: prefs.voiceId,
@@ -113,6 +122,7 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
   }, [])
 
   const resume = useCallback(() => {
+    primeSpeechEngine()
     resumeSpeech()
     setStatus('speaking')
   }, [])

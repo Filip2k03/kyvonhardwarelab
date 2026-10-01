@@ -1,17 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { NarrationProvider } from '@/hooks/NarrationProvider'
 import { HandoutsPage } from '@/features/handouts/HandoutsPage'
 import { LessonHandoutPage, ProjectHandoutPage } from '@/features/handouts/HandoutPrintPage'
 
 function renderAt(path: string) {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <Routes>
-        <Route path="/handouts" element={<HandoutsPage />} />
-        <Route path="/handouts/lessons/:lessonSlug" element={<LessonHandoutPage />} />
-        <Route path="/handouts/projects/:slug" element={<ProjectHandoutPage />} />
-      </Routes>
+      <NarrationProvider>
+        <Routes>
+          <Route path="/handouts" element={<HandoutsPage />} />
+          <Route path="/handouts/lessons/:lessonSlug" element={<LessonHandoutPage />} />
+          <Route path="/handouts/projects/:slug" element={<ProjectHandoutPage />} />
+        </Routes>
+      </NarrationProvider>
     </MemoryRouter>,
   )
 }

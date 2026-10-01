@@ -12,6 +12,7 @@ import { ComponentCard } from '@/features/hardware/ComponentCard'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { LabPanel } from '@/components/ui/LabPanel'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { cn } from '@/lib/cn'
 
 type DifficultyFilter = Difficulty | 'all'
@@ -36,6 +37,7 @@ export function ComponentsPage() {
         eyebrow="Kit encyclopedia"
         title="Components"
         description="Engineering catalog of the KYVON physical kit. Open a part for pinout, electrical limits, wiring diagrams, firmware excerpts, and related experiments."
+        actions={<PageListenButton />}
       />
 
       <LabPanel>

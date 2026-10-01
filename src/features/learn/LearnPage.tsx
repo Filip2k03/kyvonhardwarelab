@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { listLessons, lessonsBySlugMap } from '@/data/lessons'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { StatusChip } from '@/components/ui/StatusChip'
 import { useProgress } from '@/hooks/useProgress'
@@ -23,6 +24,7 @@ export function LearnPage() {
         eyebrow="Curriculum"
         title="Learn"
         description="Curriculum from electronics fundamentals through ESP32/IoT. Each lesson follows Learn → Build → Experiment → Challenge. Progress stays in this browser."
+        actions={<PageListenButton />}
       />
 
       <ol className="space-y-2">

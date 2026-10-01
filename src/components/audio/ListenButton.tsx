@@ -15,6 +15,7 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
   const isActive = activeId === id
   const speaking = isActive && status === 'speaking'
   const paused = isActive && status === 'paused'
+  const busy = isActive && status !== 'idle' && status !== 'unsupported'
 
   if (!supported) {
     return (
@@ -26,7 +27,7 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
 
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
-      {!isActive || status === 'idle' ? (
+      {!busy ? (
         <button
           type="button"
           className={cn(
@@ -62,7 +63,7 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
         </button>
       ) : null}
 
-      {isActive && status !== 'idle' ? (
+      {busy ? (
         <button
           type="button"
           className="inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] px-3 text-sm"
@@ -73,8 +74,8 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
         </button>
       ) : null}
 
-      {isActive && status !== 'idle' ? (
-        <span className="font-mono-tech text-[11px] text-[var(--color-accent)]">
+      {busy ? (
+        <span className="font-mono-tech text-[11px] text-[var(--color-accent)]" aria-live="polite">
           {paused ? 'Paused' : 'Speaking'} · female voice
         </span>
       ) : null}

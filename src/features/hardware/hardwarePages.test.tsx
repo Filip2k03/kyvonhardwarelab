@@ -13,7 +13,9 @@ describe('ComponentsPage', () => {
     const user = userEvent.setup()
     render(
       <MemoryRouter>
-        <ComponentsPage />
+        <NarrationProvider>
+          <ComponentsPage />
+        </NarrationProvider>
       </MemoryRouter>,
     )
 

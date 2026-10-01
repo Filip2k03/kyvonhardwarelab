@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { PageListenButton } from '@/components/audio/ListenButton'
 import { OhmsLawTool } from '@/features/tools/OhmsLawTool'
 import { LedResistorTool } from '@/features/tools/LedResistorTool'
 import { VoltageDividerTool } from '@/features/tools/VoltageDividerTool'
@@ -24,12 +25,15 @@ export function ToolsPage() {
 
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Tools</h1>
-        <p className="max-w-2xl text-sm text-[var(--color-text-muted)]">
-          Pure engineering calculators for lab work. Logic lives in tested functions — these panels
-          only collect inputs and render results.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight">Tools</h1>
+          <p className="max-w-2xl text-sm text-[var(--color-text-muted)]">
+            Pure engineering calculators for lab work. Logic lives in tested functions — these panels
+            only collect inputs and render results.
+          </p>
+        </div>
+        <PageListenButton />
       </header>
 
       <div className="grid gap-4 lg:grid-cols-[16rem_minmax(0,1fr)]">
