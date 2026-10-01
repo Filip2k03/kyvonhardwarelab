@@ -26,7 +26,7 @@ export function AppShell() {
   const pageTitle = resolveTitle(location.pathname)
 
   return (
-    <div className="min-h-dvh bg-[var(--color-bg)] text-[var(--color-text)]">
+    <div className="lab-bench-bg min-h-dvh text-[var(--color-text)]">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-[var(--radius-sm)] focus:bg-[var(--color-surface)] focus:px-3 focus:py-2"
@@ -35,20 +35,25 @@ export function AppShell() {
       </a>
 
       <div className="flex min-h-dvh">
-        <aside className="no-print sticky top-0 hidden h-dvh w-60 shrink-0 border-r border-[var(--color-border)] bg-[var(--color-surface)] lg:flex lg:flex-col">
+        <aside className="no-print sticky top-0 hidden h-dvh w-60 shrink-0 border-r border-[var(--color-border)] bg-[var(--color-surface)]/95 backdrop-blur-sm lg:flex lg:flex-col">
           <div className="border-b border-[var(--color-border)] px-4 py-4">
             <Link to="/" className="block">
-              <span className="font-mono-tech text-sm font-semibold tracking-wide text-[var(--color-accent)]">
+              <span className="font-mono-tech text-sm font-semibold tracking-[0.16em] text-[var(--color-accent)]">
                 KYVON
               </span>
-              <span className="mt-0.5 block text-xs text-[var(--color-text-muted)]">Hardware Lab</span>
-              <span className="mt-2 block text-[11px] leading-snug text-[var(--color-text-muted)]">
+              <span className="mt-0.5 block text-xs text-[var(--color-text)]">Hardware Lab</span>
+              <span className="mt-2 block border-l-2 border-[var(--color-accent)] pl-2 text-[11px] leading-snug text-[var(--color-text-muted)]">
                 Work at the pace of a real bench.
               </span>
             </Link>
           </div>
           <div className="flex-1 overflow-y-auto">
             <AppSidebar />
+          </div>
+          <div className="border-t border-[var(--color-border)] px-4 py-3">
+            <p className="font-mono-tech text-[10px] tracking-wide text-[var(--color-text-muted)] uppercase">
+              Local progress · no account
+            </p>
           </div>
         </aside>
 
@@ -90,9 +95,7 @@ export function AppShell() {
           <main
             id="main-content"
             aria-labelledby={titleId}
-            className={cn(
-              'mx-auto w-full max-w-6xl flex-1 px-4 py-6 pb-24 sm:px-6',
-            )}
+            className={cn('lab-page-enter mx-auto w-full max-w-6xl flex-1 px-4 py-6 pb-24 sm:px-6')}
           >
             <Outlet />
           </main>

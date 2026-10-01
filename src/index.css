@@ -15,10 +15,12 @@
 
   --color-accent: #38bdf8;
   --color-accent-strong: #0ea5e9;
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 16%, transparent);
 
   --color-danger: #f87171;
   --color-warning: #fbbf24;
   --color-success: #34d399;
+  --color-success-soft: color-mix(in srgb, var(--color-success) 16%, transparent);
 
   --color-power: #ef4444;
   --color-ground: #64748b;
@@ -86,12 +88,114 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+
+    .lab-page-enter {
+      animation: none !important;
+    }
   }
 }
 
 @layer utilities {
   .font-mono-tech {
     font-family: var(--font-mono);
+  }
+
+  .lab-bench-bg {
+    background-color: var(--color-bg);
+    background-image:
+      linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+      radial-gradient(ellipse 80% 50% at 0% 0%, rgba(14, 165, 233, 0.08), transparent 55%);
+    background-size:
+      24px 24px,
+      24px 24px,
+      auto;
+  }
+
+  .lab-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .lab-chip-muted {
+    color: var(--color-text-muted);
+    background: transparent;
+  }
+
+  .lab-chip-accent {
+    color: var(--color-accent);
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    background: var(--color-accent-soft);
+  }
+
+  .lab-chip-success {
+    color: var(--color-success);
+    border-color: color-mix(in srgb, var(--color-success) 45%, var(--color-border));
+    background: var(--color-success-soft);
+  }
+
+  .lab-row {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease;
+  }
+
+  .lab-row:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-raised);
+  }
+
+  .lab-btn-primary {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    background: var(--color-accent-strong);
+    padding: 0 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-bg);
+  }
+
+  .lab-btn-primary:hover {
+    filter: brightness(1.06);
+  }
+
+  .lab-btn-ghost {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    padding: 0 1rem;
+    font-size: 0.875rem;
+  }
+
+  .lab-btn-ghost:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-raised);
+  }
+
+  .lab-page-enter {
+    animation: lab-fade-up 220ms ease-out;
+  }
+
+  @keyframes lab-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 

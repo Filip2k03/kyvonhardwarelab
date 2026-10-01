@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import { PRIMARY_NAV } from '@/app/navigation'
 import { PageListenButton } from '@/components/audio/ListenButton'
+import { LabPanel, SectionTitle } from '@/components/ui/LabPanel'
+import { MeterBar } from '@/components/ui/MeterBar'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { StatusChip } from '@/components/ui/StatusChip'
 import { useProgress } from '@/hooks/useProgress'
 import { buildDashboardSummary } from '@/lib/dashboard/summary'
-import { PROGRESS_STATUS_LABELS } from '@/lib/learn/labels'
 
 export function DashboardPage() {
   const { document } = useProgress()
@@ -17,80 +20,77 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">KYVON Hardware Lab</h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-[var(--color-text-muted)]">
-          Your personal bench companion. Pick up the open lesson, finish an experiment, or jump into
-          a project. Everything below comes from progress stored only on this device.
-        </p>
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Link
-            to={continueTo}
-            className="inline-flex min-h-11 items-center bg-[var(--color-accent-strong)] px-4 text-sm font-medium text-[var(--color-bg)]"
-          >
-            {continueLabel}
-          </Link>
-          <Link
-            to="/projects"
-            className="inline-flex min-h-11 items-center border border-[var(--color-border)] px-4 text-sm"
-          >
-            Projects
-          </Link>
-          <PageListenButton />
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Bench home"
+        title="KYVON Hardware Lab"
+        description="Your personal bench companion. Pick up the open lesson, finish an experiment, or jump into a project. Everything below comes from progress stored only on this device."
+        actions={
+          <>
+            <Link to={continueTo} className="lab-btn-primary">
+              {continueLabel}
+            </Link>
+            <Link to="/projects" className="lab-btn-ghost">
+              Projects
+            </Link>
+            <PageListenButton />
+          </>
+        }
+      />
 
-      <section
-        aria-labelledby="progress-heading"
-        className="grid gap-3 sm:grid-cols-3"
-      >
+      <section aria-labelledby="progress-heading" className="grid gap-3 sm:grid-cols-3">
         <h2 id="progress-heading" className="sr-only">
           Learning progress
         </h2>
-        <div className="border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+        <LabPanel>
           <p className="text-xs text-[var(--color-text-muted)]">Lessons completed</p>
-          <p className="font-mono-tech text-2xl">
+          <p className="mt-1 font-mono-tech text-2xl">
             {summary.lessonCounts.completed}
             <span className="text-sm text-[var(--color-text-muted)]">
               /{summary.lessonCounts.total}
             </span>
           </p>
-        </div>
-        <div className="border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+          <MeterBar
+            className="mt-3"
+            label="Curriculum coverage"
+            value={summary.lessonCounts.completed}
+            max={summary.lessonCounts.total}
+          />
+        </LabPanel>
+        <LabPanel>
           <p className="text-xs text-[var(--color-text-muted)]">Lessons in progress</p>
-          <p className="font-mono-tech text-2xl">{summary.lessonCounts.inProgress}</p>
-        </div>
-        <div className="border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+          <p className="mt-1 font-mono-tech text-2xl">{summary.lessonCounts.inProgress}</p>
+          <p className="mt-3 text-xs text-[var(--color-text-muted)]">
+            Keep one lesson hot on the bench rather than starting many.
+          </p>
+        </LabPanel>
+        <LabPanel>
           <p className="text-xs text-[var(--color-text-muted)]">Projects completed</p>
-          <p className="font-mono-tech text-2xl">{summary.completedProjects.length}</p>
-        </div>
+          <p className="mt-1 font-mono-tech text-2xl">{summary.completedProjects.length}</p>
+          <p className="mt-3 text-xs text-[var(--color-text-muted)]">
+            {summary.inProgressProjects.length} active build
+            {summary.inProgressProjects.length === 1 ? '' : 's'} open
+          </p>
+        </LabPanel>
       </section>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="space-y-3" aria-labelledby="experiments-heading">
-          <h2
-            id="experiments-heading"
-            className="text-sm font-semibold tracking-wide text-[var(--color-text-muted)] uppercase"
-          >
-            Unfinished experiments
-          </h2>
+          <SectionTitle id="experiments-heading">Unfinished experiments</SectionTitle>
           {summary.unfinishedExperiments.length === 0 ? (
             <p className="text-sm text-[var(--color-text-muted)]">
               No open experiments. Open a lesson and mark the physical experiment when you finish it.
             </p>
           ) : (
-            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)]">
+            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)] bg-[var(--color-surface)]">
               {summary.unfinishedExperiments.map((item) => (
                 <li key={item.experimentId}>
                   {item.lesson ? (
                     <Link
                       to={`/learn/${item.lesson.slug}`}
-                      className="flex min-h-11 items-center justify-between gap-3 px-3 py-2 text-sm hover:bg-[var(--color-surface)]"
+                      className="flex min-h-11 items-center justify-between gap-3 px-3 py-2 text-sm hover:bg-[var(--color-surface-raised)]"
                     >
                       <span>{item.lesson.title}</span>
-                      <span className="font-mono-tech text-xs text-[var(--color-accent)]">
-                        experiment
-                      </span>
+                      <span className="lab-chip lab-chip-accent">experiment</span>
                     </Link>
                   ) : (
                     <p className="px-3 py-2 font-mono-tech text-xs text-[var(--color-text-muted)]">
@@ -104,23 +104,18 @@ export function DashboardPage() {
         </section>
 
         <section className="space-y-3" aria-labelledby="bookmarks-heading">
-          <h2
-            id="bookmarks-heading"
-            className="text-sm font-semibold tracking-wide text-[var(--color-text-muted)] uppercase"
-          >
-            Bookmarks
-          </h2>
+          <SectionTitle id="bookmarks-heading">Bookmarks</SectionTitle>
           {summary.bookmarkedLessons.length === 0 ? (
             <p className="text-sm text-[var(--color-text-muted)]">
               Bookmark a lesson from its page to pin it here.
             </p>
           ) : (
-            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)]">
+            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)] bg-[var(--color-surface)]">
               {summary.bookmarkedLessons.map((lesson) => (
                 <li key={lesson.id}>
                   <Link
                     to={`/learn/${lesson.slug}`}
-                    className="flex min-h-11 items-center px-3 py-2 text-sm hover:bg-[var(--color-surface)]"
+                    className="flex min-h-11 items-center px-3 py-2 text-sm hover:bg-[var(--color-surface-raised)]"
                   >
                     {lesson.title}
                   </Link>
@@ -131,12 +126,7 @@ export function DashboardPage() {
         </section>
 
         <section className="space-y-3" aria-labelledby="projects-heading">
-          <h2
-            id="projects-heading"
-            className="text-sm font-semibold tracking-wide text-[var(--color-text-muted)] uppercase"
-          >
-            Active projects
-          </h2>
+          <SectionTitle id="projects-heading">Active projects</SectionTitle>
           {summary.inProgressProjects.length === 0 && summary.completedProjects.length === 0 ? (
             <p className="text-sm text-[var(--color-text-muted)]">
               Start a build from{' '}
@@ -146,17 +136,15 @@ export function DashboardPage() {
               .
             </p>
           ) : (
-            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)]">
+            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)] bg-[var(--color-surface)]">
               {summary.inProgressProjects.map((project) => (
                 <li key={project.id}>
                   <Link
                     to={`/projects/${project.slug}`}
-                    className="flex min-h-11 items-center justify-between gap-3 px-3 py-2 text-sm hover:bg-[var(--color-surface)]"
+                    className="flex min-h-11 items-center justify-between gap-3 px-3 py-2 text-sm hover:bg-[var(--color-surface-raised)]"
                   >
                     <span>{project.title}</span>
-                    <span className="font-mono-tech text-xs text-[var(--color-accent)]">
-                      {PROGRESS_STATUS_LABELS.IN_PROGRESS}
-                    </span>
+                    <StatusChip status="IN_PROGRESS" />
                   </Link>
                 </li>
               ))}
@@ -164,12 +152,10 @@ export function DashboardPage() {
                 <li key={project.id}>
                   <Link
                     to={`/projects/${project.slug}`}
-                    className="flex min-h-11 items-center justify-between gap-3 px-3 py-2 text-sm hover:bg-[var(--color-surface)]"
+                    className="flex min-h-11 items-center justify-between gap-3 px-3 py-2 text-sm hover:bg-[var(--color-surface-raised)]"
                   >
                     <span>{project.title}</span>
-                    <span className="font-mono-tech text-xs text-[var(--color-text-muted)]">
-                      {PROGRESS_STATUS_LABELS.COMPLETED}
-                    </span>
+                    <StatusChip status="COMPLETED" />
                   </Link>
                 </li>
               ))}
@@ -178,12 +164,7 @@ export function DashboardPage() {
         </section>
 
         <section className="space-y-3" aria-labelledby="recent-heading">
-          <h2
-            id="recent-heading"
-            className="text-sm font-semibold tracking-wide text-[var(--color-text-muted)] uppercase"
-          >
-            Recently viewed components
-          </h2>
+          <SectionTitle id="recent-heading">Recently viewed components</SectionTitle>
           {summary.recentComponents.length === 0 ? (
             <p className="text-sm text-[var(--color-text-muted)]">
               Open parts in the{' '}
@@ -193,12 +174,12 @@ export function DashboardPage() {
               and they will appear here.
             </p>
           ) : (
-            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)]">
+            <ul className="divide-y divide-[var(--color-border)] border border-[var(--color-border)] bg-[var(--color-surface)]">
               {summary.recentComponents.map((component) => (
                 <li key={component.id}>
                   <Link
                     to={`/components/${component.slug}`}
-                    className="flex min-h-11 items-center px-3 py-2 text-sm hover:bg-[var(--color-surface)]"
+                    className="flex min-h-11 items-center px-3 py-2 text-sm hover:bg-[var(--color-surface-raised)]"
                   >
                     {component.name}
                   </Link>
@@ -210,18 +191,13 @@ export function DashboardPage() {
       </div>
 
       <section aria-labelledby="areas-heading" className="space-y-3">
-        <h2
-          id="areas-heading"
-          className="text-sm font-semibold tracking-wide text-[var(--color-text-muted)] uppercase"
-        >
-          Areas
-        </h2>
+        <SectionTitle id="areas-heading">Areas</SectionTitle>
         <ul className="grid gap-3 sm:grid-cols-2">
           {PRIMARY_NAV.filter((item) => item.to !== '/').map((item) => (
             <li key={item.to}>
               <Link
                 to={item.to}
-                className="flex min-h-11 items-center gap-3 border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 hover:border-[var(--color-border-strong)]"
+                className="lab-row flex min-h-11 items-center gap-3 px-4 py-3"
               >
                 <item.icon aria-hidden="true" className="h-4 w-4 text-[var(--color-accent)]" />
                 <span className="text-sm font-medium">{item.label}</span>
