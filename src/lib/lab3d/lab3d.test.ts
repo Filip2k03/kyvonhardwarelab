@@ -1,6 +1,11 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { UNO_BOARD_HOTSPOTS } from '@/data/lab3d/unoBoard'
 import { detectWebGL } from '@/lib/lab3d/detectWebGL'
+import {
+  boardGroupOffset,
+  benchGroupOffset,
+  isBoardSideHotspot,
+} from '@/lib/lab3d/viewModes'
 
 describe('uno board hotspots', () => {
   it('defines teaching hotspots with positions and copy', () => {
@@ -11,6 +16,17 @@ describe('uno board hotspots', () => {
       expect(hotspot.details.length).toBeGreaterThan(20)
       expect(hotspot.pinNames.length).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('lab3d view modes', () => {
+  it('offsets board and bench in exploded layout', () => {
+    expect(boardGroupOffset('assembled')).toEqual([0, 0, 0])
+    expect(benchGroupOffset('assembled')).toEqual([0, 0, 0])
+    expect(boardGroupOffset('exploded')[0]).toBeLessThan(0)
+    expect(benchGroupOffset('exploded')[0]).toBeGreaterThan(0)
+    expect(isBoardSideHotspot('digital')).toBe(true)
+    expect(isBoardSideHotspot('part')).toBe(false)
   })
 })
 

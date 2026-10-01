@@ -2,9 +2,9 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
 interface PageHeaderProps {
-  readonly eyebrow?: string
+  readonly eyebrow?: ReactNode
   readonly title: string
-  readonly description?: string
+  readonly description?: ReactNode
   readonly actions?: ReactNode
   readonly className?: string
 }
@@ -14,7 +14,7 @@ export function PageHeader({ eyebrow, title, description, actions, className }: 
     <header className={cn('lab-page-header space-y-3', className)}>
       <div className="space-y-2">
         {eyebrow ? (
-          <p className="font-mono-tech text-[11px] tracking-[0.14em] text-[var(--color-accent)] uppercase">
+          <p className="font-mono-tech text-[11px] tracking-[0.14em] text-[var(--color-text-muted)]">
             {eyebrow}
           </p>
         ) : null}

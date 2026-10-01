@@ -1,7 +1,11 @@
-import { Component, type ErrorInfo, type ReactNode, useMemo, useState } from 'react'
+import { Component, type ErrorInfo, type ReactNode, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { UNO_BOARD_HOTSPOTS } from '@/data/lab3d/unoBoard'
+import { findHardwareBySlug } from '@/data/hardware'
 import { detectWebGL } from '@/lib/lab3d/detectWebGL'
+import { LAB3D_VIEW_MODES, type Lab3dViewMode } from '@/lib/lab3d/viewModes'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
+import { useInspector } from '@/hooks/useInspector'
 import { BoardCanvas } from '@/features/lab3d/BoardCanvas'
 import { HotspotInfoPanel } from '@/features/lab3d/HotspotInfoPanel'
 import { WebGlFallback } from '@/features/lab3d/WebGlFallback'
@@ -34,12 +38,64 @@ class Lab3dErrorBoundary extends Component<
 export function Lab3dExperience() {
   const reducedMotion = usePrefersReducedMotion()
   const webgl = useMemo(() => detectWebGL(), [])
+  const { setContent } = useInspector()
   const [selectedId, setSelectedId] = useState<string | null>('digital-bank')
+  const [selectedPin, setSelectedPin] = useState<string | null>(null)
   const [resetToken, setResetToken] = useState(0)
   const [runtimeError, setRuntimeError] = useState<string | null>(null)
   const [fullscreen, setFullscreen] = useState(false)
+  const [viewMode, setViewMode] = useState<Lab3dViewMode>('assembled')
 
   const selected = UNO_BOARD_HOTSPOTS.find((hotspot) => hotspot.id === selectedId) ?? null
+  const catalog = selected?.relatedComponentSlug
+    ? findHardwareBySlug(selected.relatedComponentSlug)
+    : undefined
+
+  function selectHotspot(id: string) {
+    setSelectedId(id)
+    setSelectedPin(null)
+  }
+
+  useEffect(() => {
+    if (!selected) {
+      setContent({
+        title: '3D Lab',
+        body: (
+          <p className="text-sm text-[var(--color-text-muted)]">
+            Select a hotspot to inspect pins and linked catalog parts.
+          </p>
+        ),
+      })
+      return () => setContent(null)
+    }
+
+    setContent({
+      title: selected.label,
+      body: (
+        <div className="space-y-3 text-sm">
+          <p className="font-mono-tech text-[10px] tracking-wide text-[var(--color-accent)] uppercase">
+            {selected.category} · {viewMode}
+          </p>
+          <p className="text-[var(--color-text-muted)]">{selected.summary}</p>
+          <p className="font-mono-tech text-xs">{selected.pinNames.join(' · ')}</p>
+          {selectedPin ? (
+            <p className="text-xs">
+              Active pin: <span className="font-mono-tech">{selectedPin}</span>
+            </p>
+          ) : null}
+          {catalog ? (
+            <Link
+              to={`/components/${catalog.slug}`}
+              className="inline-flex min-h-11 items-center text-xs text-[var(--color-accent)] hover:underline"
+            >
+              {catalog.name}
+            </Link>
+          ) : null}
+        </div>
+      ),
+    })
+    return () => setContent(null)
+  }, [selected, selectedPin, catalog, viewMode, setContent])
 
   if (!webgl || runtimeError) {
     return (
@@ -55,6 +111,23 @@ export function Lab3dExperience() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
+        {LAB3D_VIEW_MODES.map((mode) => (
+          <button
+            key={mode.id}
+            type="button"
+            title={mode.hint}
+            className={cn(
+              'min-h-11 rounded-[var(--radius-sm)] border px-3 text-sm',
+              viewMode === mode.id
+                ? 'border-[var(--color-accent)] bg-[var(--color-surface-raised)] text-[var(--color-accent-strong)]'
+                : 'border-[var(--color-border)]',
+            )}
+            aria-pressed={viewMode === mode.id}
+            onClick={() => setViewMode(mode.id)}
+          >
+            {mode.label}
+          </button>
+        ))}
         <button
           type="button"
           className="min-h-11 rounded-[var(--radius-sm)] border border-[var(--color-border)] px-3 text-sm"
@@ -85,13 +158,18 @@ export function Lab3dExperience() {
         <Lab3dErrorBoundary onError={setRuntimeError}>
           <BoardCanvas
             selectedId={selectedId}
-            onSelect={setSelectedId}
+            onSelect={selectHotspot}
             reducedMotion={reducedMotion}
             resetToken={resetToken}
+            viewMode={viewMode}
           />
         </Lab3dErrorBoundary>
         <div className="space-y-3">
-          <HotspotInfoPanel hotspot={selected} />
+          <HotspotInfoPanel
+            hotspot={selected}
+            selectedPin={selectedPin}
+            onSelectPin={setSelectedPin}
+          />
           <div>
             <h2 className="text-xs font-semibold tracking-wide text-[var(--color-text-muted)] uppercase">
               Hotspots
@@ -101,7 +179,7 @@ export function Lab3dExperience() {
                 <li key={hotspot.id}>
                   <button
                     type="button"
-                    onClick={() => setSelectedId(hotspot.id)}
+                    onClick={() => selectHotspot(hotspot.id)}
                     className={cn(
                       'flex min-h-11 w-full items-center rounded-[var(--radius-sm)] px-3 text-left text-sm',
                       selectedId === hotspot.id

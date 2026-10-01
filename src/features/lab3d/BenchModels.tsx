@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { Tube } from '@react-three/drei'
 import { CatmullRomCurve3, Vector3 } from 'three'
+import type { Lab3dViewMode } from '@/lib/lab3d/viewModes'
+import { benchGroupOffset } from '@/lib/lab3d/viewModes'
 
 function ColorBand({
   x,
@@ -17,7 +19,12 @@ function ColorBand({
   )
 }
 
-export function BenchModels() {
+interface BenchModelsProps {
+  readonly viewMode: Lab3dViewMode
+  readonly dimmed?: boolean
+}
+
+export function BenchModels({ viewMode, dimmed = false }: BenchModelsProps) {
   const jumper = useMemo(
     () =>
       new CatmullRomCurve3([
@@ -27,37 +34,39 @@ export function BenchModels() {
       ]),
     [],
   )
+  const offset = benchGroupOffset(viewMode)
+  const opacity = dimmed ? 0.22 : 1
 
   return (
-    <group>
+    <group position={offset}>
       <mesh position={[1.15, -0.02, 0.05]} receiveShadow>
         <boxGeometry args={[4.8, 0.04, 2.3]} />
-        <meshStandardMaterial color="#1a120c" roughness={0.9} />
+        <meshStandardMaterial color="#1a120c" roughness={0.9} transparent opacity={opacity} />
       </mesh>
 
       <group position={[2.05, 0.08, 0.12]}>
         <mesh castShadow receiveShadow>
           <boxGeometry args={[1.55, 0.1, 0.95]} />
-          <meshStandardMaterial color="#f3efe6" roughness={0.72} />
+          <meshStandardMaterial color="#f3efe6" roughness={0.72} transparent opacity={opacity} />
         </mesh>
         <mesh position={[0, 0.052, 0]}>
           <boxGeometry args={[1.35, 0.01, 0.08]} />
-          <meshStandardMaterial color="#d6d0c4" />
+          <meshStandardMaterial color="#d6d0c4" transparent opacity={opacity} />
         </mesh>
         <mesh position={[0, 0.055, 0.4]}>
           <boxGeometry args={[1.45, 0.012, 0.06]} />
-          <meshStandardMaterial color="#dc2626" />
+          <meshStandardMaterial color="#dc2626" transparent opacity={opacity} />
         </mesh>
         <mesh position={[0, 0.055, -0.4]}>
           <boxGeometry args={[1.45, 0.012, 0.06]} />
-          <meshStandardMaterial color="#2563eb" />
+          <meshStandardMaterial color="#2563eb" transparent opacity={opacity} />
         </mesh>
       </group>
 
       <group position={[1.55, 0.2, -0.18]} rotation={[0, 0.4, 0]}>
         <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry args={[0.045, 0.045, 0.42, 16]} />
-          <meshStandardMaterial color="#d6b48a" roughness={0.55} />
+          <meshStandardMaterial color="#d6b48a" roughness={0.55} transparent opacity={opacity} />
         </mesh>
         <ColorBand x={-0.08} color="#b91c1c" />
         <ColorBand x={-0.02} color="#b91c1c" />
@@ -65,40 +74,47 @@ export function BenchModels() {
         <ColorBand x={0.1} color="#eab308" />
         <mesh position={[-0.28, -0.06, 0]}>
           <boxGeometry args={[0.02, 0.16, 0.02]} />
-          <meshStandardMaterial color="#cbd5e1" metalness={0.6} roughness={0.25} />
+          <meshStandardMaterial color="#cbd5e1" metalness={0.6} roughness={0.25} transparent opacity={opacity} />
         </mesh>
         <mesh position={[0.28, -0.06, 0]}>
           <boxGeometry args={[0.02, 0.16, 0.02]} />
-          <meshStandardMaterial color="#cbd5e1" metalness={0.6} roughness={0.25} />
+          <meshStandardMaterial color="#cbd5e1" metalness={0.6} roughness={0.25} transparent opacity={opacity} />
         </mesh>
       </group>
 
       <group position={[2.35, 0.16, -0.36]}>
         <mesh castShadow>
           <cylinderGeometry args={[0.07, 0.08, 0.16, 16]} />
-          <meshStandardMaterial color="#fecaca" roughness={0.35} transparent opacity={0.92} />
+          <meshStandardMaterial
+            color="#fecaca"
+            roughness={0.35}
+            transparent
+            opacity={dimmed ? 0.22 : 0.92}
+          />
         </mesh>
         <mesh position={[0, 0.1, 0]}>
           <sphereGeometry args={[0.075, 16, 12]} />
           <meshStandardMaterial
             color="#ef4444"
             emissive="#ef4444"
-            emissiveIntensity={0.35}
+            emissiveIntensity={dimmed ? 0.05 : 0.35}
             roughness={0.25}
+            transparent
+            opacity={opacity}
           />
         </mesh>
         <mesh position={[-0.03, -0.14, 0]}>
           <boxGeometry args={[0.02, 0.16, 0.02]} />
-          <meshStandardMaterial color="#e2e8f0" metalness={0.55} roughness={0.3} />
+          <meshStandardMaterial color="#e2e8f0" metalness={0.55} roughness={0.3} transparent opacity={opacity} />
         </mesh>
         <mesh position={[0.03, -0.16, 0]}>
           <boxGeometry args={[0.02, 0.12, 0.02]} />
-          <meshStandardMaterial color="#e2e8f0" metalness={0.55} roughness={0.3} />
+          <meshStandardMaterial color="#e2e8f0" metalness={0.55} roughness={0.3} transparent opacity={opacity} />
         </mesh>
       </group>
 
       <Tube args={[jumper, 24, 0.028, 8, false]}>
-        <meshStandardMaterial color="#f97316" roughness={0.45} />
+        <meshStandardMaterial color="#f97316" roughness={0.45} transparent opacity={opacity} />
       </Tube>
     </group>
   )

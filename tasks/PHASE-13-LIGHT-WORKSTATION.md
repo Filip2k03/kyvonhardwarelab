@@ -13,7 +13,7 @@ Evolutionary redesign only. Do not regenerate the app or drop working routes/dat
 | 3 | Application shell (command bar / nav / inspector) | done |
 | 4 | Component explorer tabs | done |
 | 5 | Workbench workspace | done |
-| 6 | 3D Lab upgrade | pending |
+| 6 | 3D Lab upgrade | done |
 | 7 | Learning interface flow | pending |
 | 8 | Responsive / mobile | pending |
 | 9 | Performance / a11y audit | pending |

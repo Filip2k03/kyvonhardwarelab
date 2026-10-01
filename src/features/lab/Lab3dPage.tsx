@@ -1,5 +1,6 @@
 import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { PageHeader } from '@/components/ui/PageHeader'
 import { PageLoader } from '@/components/ui/LoadingSpinner'
 import { WebGlFallback } from '@/features/lab3d/WebGlFallback'
 import { detectWebGL } from '@/lib/lab3d/detectWebGL'
@@ -15,21 +16,25 @@ export function Lab3dPage() {
 
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <p className="text-xs text-[var(--color-text-muted)]">
-          <Link to="/lab" className="text-[var(--color-accent)] hover:underline">
-            Lab
-          </Link>
-          <span aria-hidden="true"> / </span>
-          <span className="font-mono-tech">3d</span>
-        </p>
-        <h1 className="text-2xl font-semibold tracking-tight">3D Explorer</h1>
-        <p className="max-w-3xl text-sm text-[var(--color-text-muted)]">
-          Orbit the controller, then the breadboard beside it: a 220 Ω resistor, an LED, and the
-          jumper that ties them to a pin. Three.js loads only on this route.{' '}
-          {UNO_BOARD_FALLBACK_SUMMARY}
-        </p>
-      </header>
+      <PageHeader
+        eyebrow={
+          <>
+            <Link to="/lab" className="text-[var(--color-accent)] hover:underline">
+              Workbench
+            </Link>
+            <span aria-hidden="true"> / </span>
+            <span className="font-mono-tech">3d</span>
+          </>
+        }
+        title="3D Lab"
+        description={
+          <>
+            Orbit the controller and breadboard path. Select pins to jump into the hardware catalog.
+            Assembled, exploded, and isolate views stay on this route — Three.js loads only here.{' '}
+            {UNO_BOARD_FALLBACK_SUMMARY}
+          </>
+        }
+      />
 
       {!webgl ? (
         <WebGlFallback reason="WebGL is not available in this environment." />

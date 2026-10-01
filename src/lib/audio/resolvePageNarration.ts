@@ -124,7 +124,7 @@ export function resolvePageNarration(pathname: string): PageNarration {
     const spots = UNO_BOARD_HOTSPOTS.map((hotspot) => narrateHotspot(hotspot)).join(' ')
     return {
       id: 'lab3d',
-      title: '3D Explorer',
+      title: '3D Lab',
       text: `${UNO_BOARD_FALLBACK_SUMMARY} ${spots}`,
     }
   }

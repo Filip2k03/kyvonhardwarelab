@@ -19,7 +19,7 @@ describe('Lab3dPage fallback', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: '3D Explorer' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '3D Lab' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: '3D view unavailable' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Digital I/O (D0–D13)' })).toBeInTheDocument()
     expect(screen.getByText(/USB provides 5V power/i)).toBeInTheDocument()
