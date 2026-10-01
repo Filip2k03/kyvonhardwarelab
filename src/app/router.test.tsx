@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { AppRouter } from '@/app/router'
@@ -55,5 +55,20 @@ describe('AppRouter', () => {
   it('resolves component detail slug routes', () => {
     renderAt('/components/dht11')
     expect(screen.getByRole('heading', { level: 1, name: /DHT11/i })).toBeInTheDocument()
+  })
+
+  it('keeps shell landmarks and core routes after redesign', () => {
+    const home = renderAt('/')
+    expect(within(home.container).getByRole('link', { name: 'Skip to content' })).toBeInTheDocument()
+    expect(within(home.container).getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
+    expect(within(home.container).getByRole('navigation', { name: 'Mobile primary' })).toBeInTheDocument()
+    expect(within(home.container).getByRole('main')).toBeInTheDocument()
+    home.unmount()
+
+    for (const path of ['/learn', '/components', '/lab', '/projects', '/tools', '/progress'] as const) {
+      const view = renderAt(path)
+      expect(within(view.container).getByRole('main')).toBeInTheDocument()
+      view.unmount()
+    }
   })
 })

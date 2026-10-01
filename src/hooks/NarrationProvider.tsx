@@ -19,6 +19,7 @@ import {
 import { NarrationContext } from '@/hooks/narrationContext'
 
 function readPrefs() {
+  if (typeof window === 'undefined') return DEFAULT_LAB_PREFERENCES
   return readLabPreferences(window.localStorage.getItem(LAB_PREFERENCES_KEY))
 }
 
@@ -49,17 +50,16 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
 
   useEffect(() => {
     const sync = () => {
+      if (typeof window === 'undefined') return
       const prefs = readPrefs()
       setVoiceIdState(prefs.voiceId)
       setLanguage(prefs.language)
     }
     window.addEventListener('storage', sync)
     window.addEventListener('kyvon-lab-prefs', sync)
-    const timer = window.setInterval(sync, 800)
     return () => {
       window.removeEventListener('storage', sync)
       window.removeEventListener('kyvon-lab-prefs', sync)
-      window.clearInterval(timer)
     }
   }, [])
 

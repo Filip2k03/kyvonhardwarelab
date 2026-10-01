@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { Headphones, PanelRight, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { MOBILE_NAV, PRIMARY_NAV } from '@/app/navigation'
 import { PageListenButton } from '@/components/audio/ListenButton'
 import { useInspector } from '@/hooks/useInspector'
@@ -157,6 +158,15 @@ export function InspectorPanel() {
   const title = content?.title ?? 'Inspector'
   const body = content?.body ?? defaultInspectorBody(location.pathname)
 
+  useEffect(() => {
+    if (!mobileOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [mobileOpen, setMobileOpen])
+
   const panel = (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
@@ -178,7 +188,10 @@ export function InspectorPanel() {
 
   return (
     <>
-      <aside className="no-print hidden w-72 shrink-0 border-l border-[var(--color-border)] bg-[var(--color-surface)] xl:block">
+      <aside
+        className="no-print hidden w-72 shrink-0 border-l border-[var(--color-border)] bg-[var(--color-surface)] xl:block"
+        aria-label="Inspector"
+      >
         {panel}
       </aside>
 
@@ -190,7 +203,12 @@ export function InspectorPanel() {
             aria-label="Dismiss inspector"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[min(70vh,calc(100dvh-5.5rem))] overflow-hidden rounded-t-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom)] shadow-[var(--shadow-md)]">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            className="absolute inset-x-0 bottom-0 max-h-[min(70vh,calc(100dvh-5.5rem))] overflow-hidden rounded-t-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom)] shadow-[var(--shadow-md)]"
+          >
             {panel}
           </div>
         </div>

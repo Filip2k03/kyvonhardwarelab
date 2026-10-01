@@ -16,8 +16,8 @@ Evolutionary redesign only. Do not regenerate the app or drop working routes/dat
 | 6 | 3D Lab upgrade | done |
 | 7 | Learning interface flow | done |
 | 8 | Responsive / mobile | done |
-| 9 | Performance / a11y audit | pending |
-| 10 | Regression testing | pending |
+| 9 | Performance / a11y audit | done |
+| 10 | Regression testing | done |
 
 After each step: lint, typecheck, relevant tests, production build.
 

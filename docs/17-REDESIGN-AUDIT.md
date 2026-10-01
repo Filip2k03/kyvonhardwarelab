@@ -33,6 +33,12 @@ Baseline: lint / typecheck / 109 tests / production build — **PASS**
 - R3F/drei chunk ~930 kB lazy (expected)
 - Lab3d / Project3d already code-split
 
+## Bundle notes (post Phase 13)
+
+- Main chunk ~526 kB / ~152 kB gzip
+- ContactShadows / R3F chunk ~930 kB lazy (unchanged pattern)
+- Lab3d experience chunk ~23 kB beside the shared 3D vendor split
+
 ## Safe migration rules
 
 1. Keep all existing pathnames (`/lab`, `/lab/3d`, `/components/:slug`, …)
