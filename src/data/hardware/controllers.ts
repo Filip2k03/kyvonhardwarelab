@@ -1,0 +1,58 @@
+import type { HardwareComponent } from '@/types/hardware'
+
+export const CONTROLLER_COMPONENTS: readonly HardwareComponent[] = [
+  {
+    id: 'hw-atmega328p-uno',
+    slug: 'atmega328p-arduino-compatible',
+    name: 'ATmega328P Arduino-compatible controller',
+    category: 'controller',
+    description:
+      'Uno-class development board based on the ATmega328P microcontroller. Primary controller for kit experiments.',
+    difficulty: 'beginner',
+    operatingVoltage: '5V (USB or regulated VIN; revision-dependent barrel jack range)',
+    logicVoltage: '5V TTL',
+    interfaces: ['gpio', 'adc', 'pwm', 'i2c', 'spi', 'uart', 'power'],
+    pins: [
+      { id: '5v', name: '5V', type: 'power', description: 'Regulated 5V rail output', voltage: '5V' },
+      { id: '3v3', name: '3.3V', type: 'power', description: 'On-board 3.3V regulator output', voltage: '3.3V' },
+      { id: 'gnd', name: 'GND', type: 'ground', description: 'Common ground' },
+      { id: 'vin', name: 'VIN', type: 'power', description: 'External supply input (check board labeling)' },
+      { id: 'd0', name: 'D0/RX', type: 'uart', description: 'UART receive / digital I/O' },
+      { id: 'd1', name: 'D1/TX', type: 'uart', description: 'UART transmit / digital I/O' },
+      { id: 'd2', name: 'D2', type: 'digital', description: 'Digital I/O' },
+      { id: 'd3', name: 'D3', type: 'pwm', description: 'Digital I/O with PWM capability' },
+      { id: 'd4', name: 'D4', type: 'digital', description: 'Digital I/O' },
+      { id: 'd5', name: 'D5', type: 'pwm', description: 'Digital I/O with PWM capability' },
+      { id: 'd6', name: 'D6', type: 'pwm', description: 'Digital I/O with PWM capability' },
+      { id: 'd7', name: 'D7', type: 'digital', description: 'Digital I/O' },
+      { id: 'd8', name: 'D8', type: 'digital', description: 'Digital I/O' },
+      { id: 'd9', name: 'D9', type: 'pwm', description: 'Digital I/O with PWM capability' },
+      { id: 'd10', name: 'D10', type: 'pwm', description: 'SPI SS / PWM digital I/O' },
+      { id: 'd11', name: 'D11', type: 'spi', description: 'SPI MOSI / PWM digital I/O' },
+      { id: 'd12', name: 'D12', type: 'spi', description: 'SPI MISO / digital I/O' },
+      { id: 'd13', name: 'D13', type: 'spi', description: 'SPI SCK / onboard LED / digital I/O' },
+      { id: 'a0', name: 'A0', type: 'analog', description: 'Analog input / digital I/O' },
+      { id: 'a1', name: 'A1', type: 'analog', description: 'Analog input / digital I/O' },
+      { id: 'a2', name: 'A2', type: 'analog', description: 'Analog input / digital I/O' },
+      { id: 'a3', name: 'A3', type: 'analog', description: 'Analog input / digital I/O' },
+      { id: 'a4', name: 'A4/SDA', type: 'i2c', description: 'I2C SDA / analog input' },
+      { id: 'a5', name: 'A5/SCL', type: 'i2c', description: 'I2C SCL / analog input' },
+      { id: 'arefu', name: 'AREF', type: 'other', description: 'Analog reference input' },
+      { id: 'reset', name: 'RESET', type: 'other', description: 'Active-low reset' },
+    ],
+    operatingPrinciple:
+      'The MCU executes uploaded firmware, driving GPIO and peripherals according to the sketch while sharing a common ground with external modules.',
+    useCases: [
+      'Driving LEDs, sensors, and actuators',
+      'Reading analog sensors via ADC',
+      'Teaching GPIO, PWM, and serial communication',
+    ],
+    safety: [
+      'Do not exceed pin absolute maximum ratings (typically 5V logic on this class of board).',
+      'Avoid shorting 5V to GND on the breadboard rails.',
+      'Motor and relay loads may need separate supply paths and flyback protection.',
+    ],
+    relatedLessons: ['electronics-fundamentals', 'gpio', 'pwm'],
+    relatedProjects: ['blink', 'traffic-light', 'kyvon-desk-terminal'],
+  },
+] as const
