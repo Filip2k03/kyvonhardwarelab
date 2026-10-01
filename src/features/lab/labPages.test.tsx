@@ -30,7 +30,7 @@ describe('Lab circuit UI', () => {
 
   it('lists starter and actuator circuits', () => {
     renderLab('/lab')
-    expect(screen.getByRole('heading', { name: 'Lab' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Workbench' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'LED with series resistor' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Active buzzer on GPIO' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'RC522 RFID over SPI' })).toBeInTheDocument()

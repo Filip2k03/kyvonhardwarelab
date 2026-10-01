@@ -9,36 +9,42 @@ Avoid decorative excess.
 
 ## Visual Direction
 
+Light engineering workstation inspired by CAD tools, lab instruments, and
+technical documentation.
+
 - Dense but readable layouts
-- Clear section boundaries without heavy card chrome
+- Clear section boundaries with restrained elevation
 - Monospace accents for pins, values, and code
-- Neutral base palette with a single technical accent
+- Neutral light surfaces with a single technical blue accent
 - High contrast for diagrams and safety warnings
+- Radii 6–12px only
 
 Avoid:
 
-- excessive gradients
-- glassmorphism
-- decorative animations
-- giant hero typography
+- heavy gradients
+- neon cyberpunk styling
+- excessive glassmorphism
+- giant marketing headings
 - purple-on-white marketing themes
 - fake metrics dashboards
+- decorative animations
 
 ## Tokens
 
-Define CSS variables (or Tailwind theme extensions) for:
-
-| Token group | Purpose |
-|-------------|---------|
-| `--color-bg` / `--color-surface` / `--color-border` | Surfaces |
-| `--color-text` / `--color-text-muted` | Typography |
-| `--color-accent` | Interactive emphasis |
-| `--color-danger` / `--color-warning` / `--color-success` | Status |
-| `--color-power` / `--color-ground` / `--color-signal-*` | Circuit semantics |
-| `--font-sans` / `--font-mono` | Type |
-| `--space-*` | Spacing scale |
-| `--radius-sm` / `--radius-md` | Subtle radii only |
-| `--focus-ring` | Visible focus |
+| Token | Value / purpose |
+|-------|------------------|
+| `--color-bg` | `#F7F8FA` page background |
+| `--color-surface` | `#FFFFFF` primary panels |
+| `--color-surface-raised` | `#F1F3F5` secondary panels |
+| `--color-border` / `--color-border-strong` | subtle neutrals |
+| `--color-text` | `#111318` |
+| `--color-text-muted` | `#667085` |
+| `--color-accent` / `--color-accent-strong` | restrained electric blue |
+| `--color-danger` / `--color-warning` / `--color-success` | semantic status |
+| `--color-power` / `--color-ground` / `--color-signal-*` | circuit semantics |
+| `--font-sans` / `--font-mono` | type |
+| `--radius-sm` / `--radius-md` / `--radius-lg` | 6 / 8 / 12px |
+| `--shadow-sm` / `--shadow-md` | elevation only where hierarchy needs it |
 
 ## Typography
 
@@ -63,12 +69,8 @@ Combine:
 - Predictable hover / active states
 - Keyboard-reachable controls
 - Touch targets ≥ 44px on mobile where practical
-
-## Motion
-
-- Prefer functional transitions (panel open, route fade)
+- Functional motion only (~120–240ms)
 - Respect `prefers-reduced-motion`
-- No continuous decorative loops
 
 ## Print
 
@@ -82,6 +84,8 @@ Validate at:
 
 - 320px
 - 375px
+- 430px
 - 768px
 - 1024px
-- 1440px
+- 1280px
+- 1440px+

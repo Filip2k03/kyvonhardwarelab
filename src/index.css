@@ -4,42 +4,47 @@
   --font-sans: 'IBM Plex Sans', 'Noto Sans Myanmar', 'Noto Sans JP', 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, Menlo, monospace;
 
-  --color-bg: #0f1419;
-  --color-surface: #171d25;
-  --color-surface-raised: #1e2630;
-  --color-border: #2a3441;
-  --color-border-strong: #3a4656;
+  /* Light engineering workstation */
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f1f3f5;
+  --color-border: #e4e7ec;
+  --color-border-strong: #d0d5dd;
 
-  --color-text: #e8eef5;
-  --color-text-muted: #93a1b3;
+  --color-text: #111318;
+  --color-text-muted: #667085;
+  --color-text-on-accent: #ffffff;
 
-  --color-accent: #38bdf8;
-  --color-accent-strong: #0ea5e9;
-  --color-accent-soft: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  --color-accent: #2563eb;
+  --color-accent-strong: #1d4ed8;
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 12%, transparent);
 
-  --color-danger: #f87171;
-  --color-warning: #fbbf24;
-  --color-success: #34d399;
-  --color-success-soft: color-mix(in srgb, var(--color-success) 16%, transparent);
+  --color-danger: #dc2626;
+  --color-warning: #d97706;
+  --color-success: #059669;
+  --color-success-soft: color-mix(in srgb, var(--color-success) 12%, transparent);
 
-  --color-power: #ef4444;
+  --color-power: #dc2626;
   --color-ground: #64748b;
-  --color-signal-digital: #38bdf8;
-  --color-signal-analog: #a78bfa;
-  --color-signal-pwm: #f472b6;
-  --color-signal-spi: #22d3ee;
-  --color-signal-i2c: #4ade80;
-  --color-signal-uart: #fb923c;
+  --color-signal-digital: #2563eb;
+  --color-signal-analog: #7c3aed;
+  --color-signal-pwm: #db2777;
+  --color-signal-spi: #0891b2;
+  --color-signal-i2c: #059669;
+  --color-signal-uart: #ea580c;
 
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
 
-  --shadow-focus: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+  --shadow-focus: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-accent);
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html,
@@ -103,13 +108,9 @@
   .lab-bench-bg {
     background-color: var(--color-bg);
     background-image:
-      linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px),
-      radial-gradient(ellipse 80% 50% at 0% 0%, rgba(14, 165, 233, 0.08), transparent 55%);
-    background-size:
-      24px 24px,
-      24px 24px,
-      auto;
+      linear-gradient(rgba(17, 19, 24, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(17, 19, 24, 0.035) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px;
   }
 
   .lab-chip {
@@ -118,6 +119,7 @@
     min-height: 1.5rem;
     padding: 0.1rem 0.45rem;
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     letter-spacing: 0.02em;
@@ -126,47 +128,51 @@
 
   .lab-chip-muted {
     color: var(--color-text-muted);
-    background: transparent;
+    background: var(--color-surface-raised);
   }
 
   .lab-chip-accent {
-    color: var(--color-accent);
-    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    color: var(--color-accent-strong);
+    border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
     background: var(--color-accent-soft);
   }
 
   .lab-chip-success {
     color: var(--color-success);
-    border-color: color-mix(in srgb, var(--color-success) 45%, var(--color-border));
+    border-color: color-mix(in srgb, var(--color-success) 35%, var(--color-border));
     background: var(--color-success-soft);
   }
 
   .lab-row {
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
     transition:
-      border-color 140ms ease,
-      background-color 140ms ease;
+      border-color 160ms ease,
+      box-shadow 160ms ease,
+      background-color 160ms ease;
   }
 
   .lab-row:hover {
     border-color: var(--color-border-strong);
-    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-md);
   }
 
   .lab-btn-primary {
     display: inline-flex;
     min-height: 2.75rem;
     align-items: center;
+    border-radius: var(--radius-sm);
     background: var(--color-accent-strong);
     padding: 0 1rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--color-bg);
+    color: var(--color-text-on-accent);
   }
 
   .lab-btn-primary:hover {
-    filter: brightness(1.06);
+    filter: brightness(1.05);
   }
 
   .lab-btn-ghost {
@@ -174,8 +180,11 @@
     min-height: 2.75rem;
     align-items: center;
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
     padding: 0 1rem;
     font-size: 0.875rem;
+    box-shadow: var(--shadow-sm);
   }
 
   .lab-btn-ghost:hover {
@@ -183,14 +192,19 @@
     background: var(--color-surface-raised);
   }
 
+  .lab-panel {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
   .lab-page-enter {
-    animation: lab-fade-up 220ms ease-out;
+    animation: lab-fade-up 180ms ease-out;
   }
 
   @keyframes lab-fade-up {
     from {
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(4px);
     }
     to {
       opacity: 1;

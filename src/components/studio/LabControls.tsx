@@ -120,7 +120,7 @@ export function LabControls() {
                       className={cn(
                         'min-h-11 px-3 py-2 text-left text-sm',
                         selected
-                          ? 'bg-[var(--color-accent-strong)] text-[var(--color-bg)]'
+                          ? 'bg-[var(--color-accent-strong)] text-[var(--color-text-on-accent)]'
                           : 'border border-[var(--color-border)] hover:border-[var(--color-border-strong)]',
                       )}
                       onClick={() => setVoiceId(profile.id as FemaleVoiceId)}
@@ -187,7 +187,7 @@ export function LabControls() {
                       className={cn(
                         'min-h-11 px-3 text-left text-sm',
                         selected
-                          ? 'bg-[var(--color-accent-strong)] text-[var(--color-bg)]'
+                          ? 'bg-[var(--color-accent-strong)] text-[var(--color-text-on-accent)]'
                           : 'border border-[var(--color-border)] hover:border-[var(--color-border-strong)]',
                       )}
                       onClick={() => {
@@ -258,7 +258,7 @@ export function LabControls() {
 
         <button
           type="button"
-          className="ml-auto flex min-h-12 min-w-12 items-center justify-center gap-2 bg-[var(--color-accent-strong)] px-4 text-sm font-medium text-[var(--color-bg)] shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
+          className="ml-auto flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--color-accent-strong)] px-4 text-sm font-medium text-[var(--color-text-on-accent)] shadow-[var(--shadow-md)]"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
         >

@@ -58,7 +58,7 @@ function SceneBody({
 
   return (
     <>
-      <color attach="background" args={['#0a1018']} />
+      <color attach="background" args={['#eef1f5']} />
       <ambientLight intensity={0.55} />
       <directionalLight position={[4, 7, 3]} intensity={1.2} castShadow />
       <directionalLight position={[-3, 2, -2]} intensity={0.3} />

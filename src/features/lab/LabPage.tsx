@@ -9,8 +9,8 @@ export function LabPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Wiring room"
-        title="Lab"
+        eyebrow="Workbench"
+        title="Workbench"
         description="Educational wiring diagrams for kit experiments. This is not a SPICE simulator — use it to inspect connections, pins, and safety heuristics before building on a breadboard."
       />
 

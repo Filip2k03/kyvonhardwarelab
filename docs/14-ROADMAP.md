@@ -36,6 +36,7 @@ See also `docs/16-KNOWN-LIMITATIONS.md` for accepted V1 constraints after Phase 
 | 10 | Living dashboard from local progress |
 | 11 | Enrich circuit library (buzzer, relay, IR, LDR, stepper) |
 | 12 | UI polish — shared lab chrome, meters, denser lists |
+| 13 | Light engineering workstation redesign (tokens → shell → workbench → 3D) |
 
 ## Near-Term After V1
 

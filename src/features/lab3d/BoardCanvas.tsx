@@ -54,7 +54,7 @@ function SceneContent({ selectedId, onSelect, reducedMotion, resetToken }: Board
 
   return (
     <>
-      <color attach="background" args={['#0b1220']} />
+      <color attach="background" args={['#eef1f5']} />
       <ambientLight intensity={0.6} />
       <directionalLight position={[4, 6, 3]} intensity={1.15} castShadow />
       <directionalLight position={[-3, 2, -2]} intensity={0.35} />

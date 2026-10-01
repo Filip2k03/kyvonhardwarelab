@@ -47,6 +47,7 @@ export function AppRouter() {
           }
         />
         <Route path="lab" element={<LabPage />} />
+        <Route path="workbench" element={<Navigate to="/lab" replace />} />
         <Route path="lab/circuits/:slug" element={<CircuitPage />} />
         <Route
           path="lab/3d"

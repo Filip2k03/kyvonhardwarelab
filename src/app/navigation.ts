@@ -18,17 +18,27 @@ export interface NavItem {
   readonly end?: boolean
 }
 
+/** Primary destinations for the workstation shell. */
 export const PRIMARY_NAV: readonly NavItem[] = [
-  { to: '/', label: 'Dashboard', icon: Home, end: true },
+  { to: '/', label: 'Home', icon: Home, end: true },
   { to: '/learn', label: 'Learn', icon: BookOpen },
   { to: '/components', label: 'Components', icon: Cpu },
+  { to: '/lab', label: 'Workbench', icon: CircuitBoard },
+  { to: '/lab/3d', label: '3D Lab', icon: Boxes },
   { to: '/projects', label: 'Projects', icon: FolderKanban },
-  { to: '/lab', label: 'Lab', icon: CircuitBoard },
   { to: '/tools', label: 'Tools', icon: Wrench },
   { to: '/handouts', label: 'Handouts', icon: ClipboardList },
   { to: '/progress', label: 'Progress', icon: Gauge },
 ] as const
 
-export const SECONDARY_NAV: readonly NavItem[] = [
-  { to: '/lab/3d', label: '3D Explorer', icon: Boxes },
+/** Compact mobile bottom bar (subset + overflow via Home). */
+export const MOBILE_NAV: readonly NavItem[] = [
+  { to: '/', label: 'Home', icon: Home, end: true },
+  { to: '/learn', label: 'Learn', icon: BookOpen },
+  { to: '/lab', label: 'Workbench', icon: CircuitBoard },
+  { to: '/lab/3d', label: '3D Lab', icon: Boxes },
+  { to: '/projects', label: 'Projects', icon: FolderKanban },
 ] as const
+
+/** @deprecated Prefer PRIMARY_NAV — kept empty for older imports. */
+export const SECONDARY_NAV: readonly NavItem[] = [] as const
