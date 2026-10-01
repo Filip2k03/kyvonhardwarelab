@@ -122,14 +122,20 @@ function LessonFlowNav({
   readonly onSelect: (id: LessonFlowStageId) => void
 }) {
   return (
-    <nav aria-label="Lesson flow" className="sticky top-14 z-20 -mx-1 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 px-1 py-2 backdrop-blur-sm">
-      <ol className="flex flex-wrap gap-1">
+    <nav
+      aria-label="Lesson flow"
+      className="sticky top-14 z-20 -mx-4 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 px-4 py-2 backdrop-blur-sm sm:-mx-1 sm:px-1"
+    >
+      <ol className="flex gap-1 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {LESSON_FLOW_STAGES.map((item, index) => {
           const active = item.id === stage
           return (
-            <li key={item.id} className="flex items-center gap-1">
+            <li key={item.id} className="flex shrink-0 items-center gap-1">
               {index > 0 ? (
-                <span aria-hidden="true" className="px-1 font-mono-tech text-[10px] text-[var(--color-text-muted)]">
+                <span
+                  aria-hidden="true"
+                  className="hidden px-1 font-mono-tech text-[10px] text-[var(--color-text-muted)] sm:inline"
+                >
                   →
                 </span>
               ) : null}
@@ -139,13 +145,15 @@ function LessonFlowNav({
                 aria-current={active ? 'step' : undefined}
                 onClick={() => onSelect(item.id)}
                 className={cn(
-                  'min-h-11 rounded-[var(--radius-sm)] border px-3 text-sm',
+                  'min-h-11 rounded-[var(--radius-sm)] border px-3 text-sm whitespace-nowrap',
                   active
                     ? 'border-[var(--color-accent)] bg-[var(--color-surface-raised)] text-[var(--color-accent-strong)]'
                     : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface)]',
                 )}
               >
-                <span className="font-mono-tech text-[10px] tracking-wide uppercase">{String(index + 1).padStart(2, '0')}</span>
+                <span className="font-mono-tech text-[10px] tracking-wide uppercase">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
                 <span className="ml-2">{item.label}</span>
               </button>
             </li>

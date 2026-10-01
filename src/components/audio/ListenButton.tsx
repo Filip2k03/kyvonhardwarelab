@@ -82,50 +82,76 @@ export function ListenButton({ id, title, text, className, compact = false }: Li
   )
 }
 
-export function PageListenButton({ className }: { readonly className?: string }) {
+export function PageListenButton({
+  className,
+  compact = false,
+}: {
+  readonly className?: string
+  readonly compact?: boolean
+}) {
   const { supported, status, activeId, listenToPage, pause, resume, stop } = useNarration()
   const pageActive = Boolean(activeId) && status !== 'idle'
 
   if (!supported) return null
+
+  const iconOnly = compact
+    ? 'min-w-11 justify-center px-2'
+    : 'px-3'
 
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
       {!pageActive ? (
         <button
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 bg-[var(--color-surface-raised)] px-3 text-sm"
+          className={cn(
+            'inline-flex min-h-11 items-center gap-2 bg-[var(--color-surface-raised)] text-sm',
+            iconOnly,
+          )}
           onClick={listenToPage}
+          aria-label={compact ? 'Listen to this page' : undefined}
         >
           <Headphones className="h-4 w-4 text-[var(--color-accent)]" aria-hidden="true" />
-          Listen to this page
+          {compact ? <span className="sr-only">Listen to this page</span> : 'Listen to this page'}
         </button>
       ) : status === 'speaking' ? (
         <button
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] px-3 text-sm"
+          className={cn(
+            'inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] text-sm',
+            iconOnly,
+          )}
           onClick={pause}
+          aria-label={compact ? 'Pause narration' : undefined}
         >
           <Pause className="h-4 w-4" aria-hidden="true" />
-          Pause
+          {compact ? <span className="sr-only">Pause</span> : 'Pause'}
         </button>
       ) : (
         <button
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] px-3 text-sm"
+          className={cn(
+            'inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] text-sm',
+            iconOnly,
+          )}
           onClick={resume}
+          aria-label={compact ? 'Resume narration' : undefined}
         >
           <Play className="h-4 w-4" aria-hidden="true" />
-          Resume
+          {compact ? <span className="sr-only">Resume</span> : 'Resume'}
         </button>
       )}
       {pageActive ? (
         <button
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] px-3 text-sm"
+          className={cn(
+            'inline-flex min-h-11 items-center gap-2 border border-[var(--color-border)] text-sm',
+            iconOnly,
+          )}
           onClick={stop}
+          aria-label={compact ? 'Stop narration' : undefined}
         >
           <Square className="h-3.5 w-3.5" aria-hidden="true" />
-          Stop
+          {compact ? <span className="sr-only">Stop</span> : 'Stop'}
         </button>
       ) : null}
     </div>

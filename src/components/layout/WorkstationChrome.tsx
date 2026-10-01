@@ -50,8 +50,7 @@ function defaultInspectorBody(pathname: string): ReactNode {
   if (pathname.startsWith('/learn')) {
     return (
       <p className="text-sm text-[var(--color-text-muted)]">
-        Follow Learn → Predict → Wire → Code → Build → Measure → Debug → Challenge. Progress stays in
-        this browser only.
+        Follow Learn → Build → Experiment → Challenge. Progress stays in this browser only.
       </p>
     )
   }
@@ -68,13 +67,15 @@ export function TopCommandBar() {
   const { content, setMobileOpen } = useInspector()
 
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 shadow-[var(--shadow-sm)] backdrop-blur-sm">
-      <div className="flex h-14 items-center gap-3 px-3 sm:px-4">
-        <Link to="/" className="hidden min-w-0 shrink-0 sm:block">
+    <header className="no-print sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 shadow-[var(--shadow-sm)] backdrop-blur-sm pt-[env(safe-area-inset-top)]">
+      <div className="flex h-14 items-center gap-2 px-3 sm:gap-3 sm:px-4">
+        <Link to="/" className="min-w-0 shrink-0">
           <span className="font-mono-tech text-xs font-semibold tracking-[0.16em] text-[var(--color-accent-strong)]">
             KYVON
           </span>
-          <span className="ml-2 text-xs text-[var(--color-text-muted)]">Hardware Lab</span>
+          <span className="ml-2 hidden text-xs text-[var(--color-text-muted)] sm:inline">
+            Hardware Lab
+          </span>
         </Link>
 
         <div className="mx-1 hidden h-6 w-px bg-[var(--color-border)] sm:block" aria-hidden="true" />
@@ -87,11 +88,12 @@ export function TopCommandBar() {
         </div>
 
         <PageListenButton className="hidden sm:flex" />
+        <PageListenButton className="sm:hidden" compact />
 
         <button
           type="button"
           className={cn(
-            'inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] px-3 text-xs xl:hidden',
+            'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--color-border)] px-2 text-xs xl:hidden sm:px-3',
             content
               ? 'border-[var(--color-accent)] text-[var(--color-accent-strong)]'
               : 'text-[var(--color-text-muted)]',
@@ -99,7 +101,8 @@ export function TopCommandBar() {
           onClick={() => setMobileOpen(true)}
         >
           <PanelRight className="h-4 w-4" aria-hidden="true" />
-          Inspector
+          <span className="hidden sm:inline">Inspector</span>
+          <span className="sr-only sm:hidden">Open inspector</span>
         </button>
 
         <span className="hidden items-center gap-1 font-mono-tech text-[10px] tracking-wide text-[var(--color-text-muted)] uppercase md:inline-flex">
@@ -187,7 +190,7 @@ export function InspectorPanel() {
             aria-label="Dismiss inspector"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[70vh] overflow-hidden rounded-t-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-md)]">
+          <div className="absolute inset-x-0 bottom-0 max-h-[min(70vh,calc(100dvh-5.5rem))] overflow-hidden rounded-t-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom)] shadow-[var(--shadow-md)]">
             {panel}
           </div>
         </div>

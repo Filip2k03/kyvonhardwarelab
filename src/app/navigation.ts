@@ -35,9 +35,9 @@ export const PRIMARY_NAV: readonly NavItem[] = [
 export const MOBILE_NAV: readonly NavItem[] = [
   { to: '/', label: 'Home', icon: Home, end: true },
   { to: '/learn', label: 'Learn', icon: BookOpen },
-  { to: '/lab', label: 'Workbench', icon: CircuitBoard },
-  { to: '/lab/3d', label: '3D Lab', icon: Boxes },
-  { to: '/projects', label: 'Projects', icon: FolderKanban },
+  { to: '/components', label: 'Parts', icon: Cpu },
+  { to: '/lab', label: 'Bench', icon: CircuitBoard },
+  { to: '/lab/3d', label: '3D', icon: Boxes },
 ] as const
 
 /** @deprecated Prefer PRIMARY_NAV — kept empty for older imports. */

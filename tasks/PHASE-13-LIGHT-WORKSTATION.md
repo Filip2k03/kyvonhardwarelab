@@ -15,7 +15,7 @@ Evolutionary redesign only. Do not regenerate the app or drop working routes/dat
 | 5 | Workbench workspace | done |
 | 6 | 3D Lab upgrade | done |
 | 7 | Learning interface flow | done |
-| 8 | Responsive / mobile | pending |
+| 8 | Responsive / mobile | done |
 | 9 | Performance / a11y audit | pending |
 | 10 | Regression testing | pending |
 

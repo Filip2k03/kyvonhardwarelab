@@ -142,7 +142,7 @@ export function CircuitPage() {
           <div
             role="tablist"
             aria-label="Workbench modes"
-            className="flex flex-wrap gap-1 border-b border-[var(--color-border)] pb-px"
+            className="flex gap-1 overflow-x-auto border-b border-[var(--color-border)] pb-px [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {MODES.map((item) => {
               const selected = mode === item.id
@@ -153,7 +153,7 @@ export function CircuitPage() {
                   role="tab"
                   aria-selected={selected}
                   className={cn(
-                    'min-h-11 border-b-2 px-3 text-sm transition-colors duration-150',
+                    'min-h-11 shrink-0 border-b-2 px-3 text-sm whitespace-nowrap transition-colors duration-150',
                     selected
                       ? 'border-[var(--color-accent)] font-medium text-[var(--color-text)]'
                       : 'border-transparent text-[var(--color-text-muted)]',
