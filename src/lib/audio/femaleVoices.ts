@@ -1,3 +1,6 @@
+import type { LabLanguageCode } from '@/lib/studio/preferences'
+import { langMatchesVoice } from '@/lib/audio/speechLocales'
+
 export type FemaleVoiceId =
   | 1
   | 2
@@ -104,10 +107,10 @@ export const FEMALE_VOICE_PROFILES: readonly FemaleVoiceProfile[] = [
 ] as const
 
 const FEMALE_HINT =
-  /\b(female|woman|girl|zira|samantha|karen|victoria|moira|fiona|tessa|serena|kate|veena|aria|jenny|sonia|natasha|helen|susan|linda|hazel)\b/i
+  /\b(female|woman|girl|zira|samantha|karen|victoria|moira|fiona|tessa|serena|kate|veena|aria|jenny|sonia|natasha|helen|susan|linda|hazel|kyoko|haruka|milena|irina|tatyana|myanmar|burmese)\b/i
 
 const MALE_HINT =
-  /\b(male|man|boy|david|mark|daniel|thomas|alex|fred|bruce|james|george|ravi|lee)\b/i
+  /\b(male|man|boy|david|mark|daniel|thomas|alex|fred|bruce|james|george|ravi|lee|ichiro)\b/i
 
 export function isFemaleVoiceId(value: number): value is FemaleVoiceId {
   return Number.isInteger(value) && value >= 1 && value <= 10
@@ -121,20 +124,35 @@ export function looksFemaleVoice(voice: SpeechSynthesisVoice): boolean {
   const blob = `${voice.name} ${voice.voiceURI}`
   if (MALE_HINT.test(blob) && !FEMALE_HINT.test(blob)) return false
   if (FEMALE_HINT.test(blob)) return true
-  // Prefer English voices that do not announce themselves as male.
-  return /^en(-|_)/i.test(voice.lang) && !MALE_HINT.test(blob)
+  // Prefer voices that do not announce themselves as male.
+  return !MALE_HINT.test(blob)
 }
 
-export function listFemaleVoices(voices: readonly SpeechSynthesisVoice[]): SpeechSynthesisVoice[] {
-  const female = voices.filter(looksFemaleVoice)
-  return female.length > 0 ? female : voices.filter((voice) => /^en(-|_)/i.test(voice.lang))
+export function listFemaleVoices(
+  voices: readonly SpeechSynthesisVoice[],
+  language: LabLanguageCode = 'en',
+): SpeechSynthesisVoice[] {
+  const inLang = voices.filter((voice) => langMatchesVoice(voice.lang, language))
+  const femaleInLang = inLang.filter(looksFemaleVoice)
+  if (femaleInLang.length > 0) return femaleInLang
+  if (inLang.length > 0) return [...inLang]
+
+  const femaleAny = voices.filter(looksFemaleVoice)
+  if (language === 'en') {
+    return femaleAny.length > 0
+      ? femaleAny
+      : voices.filter((voice) => /^en(-|_)/i.test(voice.lang))
+  }
+  // Non-English: do not silently fall back to English voices — caller may use cloud TTS.
+  return []
 }
 
 export function pickFemaleVoice(
   voices: readonly SpeechSynthesisVoice[],
   profile: FemaleVoiceProfile,
+  language: LabLanguageCode = 'en',
 ): SpeechSynthesisVoice | null {
-  const female = listFemaleVoices(voices)
+  const female = listFemaleVoices(voices, language)
   if (female.length === 0) return null
 
   for (const preferred of profile.preferredNames) {

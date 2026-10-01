@@ -55,10 +55,8 @@ export function LabControls() {
   useEffect(() => {
     document.documentElement.style.fontSize = `${prefs.textScale}%`
     document.documentElement.lang = prefs.language
-    window.localStorage.setItem(
-      LAB_PREFERENCES_KEY,
-      JSON.stringify({ ...prefs, voiceId }),
-    )
+    window.localStorage.setItem(LAB_PREFERENCES_KEY, JSON.stringify({ ...prefs, voiceId }))
+    window.dispatchEvent(new Event('kyvon-lab-prefs'))
   }, [prefs, voiceId])
 
   function update(next: LabPreferences) {
@@ -89,8 +87,8 @@ export function LabControls() {
                   Make this lab yours
                 </h2>
                 <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-muted)]">
-                  Pick a female speaking voice, dim the screen, and change language. Spoken guides
-                  stay on this device and use your browser&apos;s speech engine.
+                  Pick a female speaking voice, dim the screen, and change language. Listen speaks
+                  English, Myanmar (Burmese), Japanese, or Russian to match Adjust.
                 </p>
               </div>
               <button
@@ -108,7 +106,8 @@ export function LabControls() {
                 Female voice · 10 versions
               </legend>
               <p className="mt-1 text-[11px] text-[var(--color-text-muted)]">
-                Female voices only. The browser chooses the closest matching system voice.
+                Female voices only. Matching system voices are used when available; Myanmar and
+                other missing voices fall back to free lab speech audio.
               </p>
               <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {FEMALE_VOICE_PROFILES.map((profile) => {
@@ -172,8 +171,11 @@ export function LabControls() {
 
             <fieldset className="mt-4">
               <legend className="text-xs font-semibold tracking-wide text-[var(--color-text-muted)] uppercase">
-                Language
+                Language · screen + audio
               </legend>
+              <p className="mt-1 text-[11px] text-[var(--color-text-muted)]">
+                Screen translation and spoken guides both follow this choice (en / my / ja / ru).
+              </p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {LAB_LANGUAGES.map((language) => {
                   const selected = prefs.language === language.code

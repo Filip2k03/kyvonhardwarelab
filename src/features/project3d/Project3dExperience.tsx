@@ -37,7 +37,7 @@ interface Project3dExperienceProps {
 export function Project3dExperience({ project }: Project3dExperienceProps) {
   const scene = useMemo(() => buildProjectScene(project), [project])
   const reducedMotion = usePrefersReducedMotion()
-  const { voiceId } = useNarration()
+  const { voiceId, language } = useNarration()
   const [stepIndex, setStepIndex] = useState(0)
   const [fullscreen, setFullscreen] = useState(false)
   const [autoAdvance, setAutoAdvance] = useState(true)
@@ -81,6 +81,7 @@ export function Project3dExperience({ project }: Project3dExperienceProps) {
       await speakNarration({
         text,
         voiceId,
+        language,
         onStatus: (status) => {
           if (gen !== playGen.current) return
           if (status === 'speaking') {
@@ -100,7 +101,7 @@ export function Project3dExperience({ project }: Project3dExperienceProps) {
         setStepIndex(index + 1)
       }
     },
-    [scene.steps, supported, project, total, voiceId, autoAdvance],
+    [scene.steps, supported, project, total, voiceId, language, autoAdvance],
   )
 
   const playIntro = useCallback(async () => {
@@ -111,6 +112,7 @@ export function Project3dExperience({ project }: Project3dExperienceProps) {
     await speakNarration({
       text: narrateProjectIntro(project),
       voiceId,
+      language,
       onStatus: (status) => {
         if (gen !== playGen.current) return
         setSpeaking(status === 'speaking')
@@ -122,7 +124,7 @@ export function Project3dExperience({ project }: Project3dExperienceProps) {
         }
       },
     })
-  }, [project, supported, voiceId, stepIndex])
+  }, [project, supported, voiceId, language, stepIndex])
 
   const shell = (
     <div
@@ -318,8 +320,8 @@ export function Project3dExperience({ project }: Project3dExperienceProps) {
           </ol>
 
           <p className="text-[11px] leading-relaxed text-[var(--color-text-muted)]">
-            Spoken guides use your browser&apos;s free female voices. Pick Voice 01–10 in Adjust.
-            Parts appear as each construction step unlocks.
+            Spoken guides follow Adjust language (English, Myanmar, Japanese, Russian). Pick Voice
+            01–10 for pace. Parts appear as each construction step unlocks.
           </p>
         </aside>
       </div>

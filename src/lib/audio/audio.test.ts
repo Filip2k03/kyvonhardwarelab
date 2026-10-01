@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { findLessonBySlug } from '@/data/lessons'
 import { findProjectBySlug } from '@/data/projects'
 import { findHardwareBySlug } from '@/data/hardware'
@@ -9,8 +9,10 @@ import {
   pickFemaleVoice,
 } from '@/lib/audio/femaleVoices'
 import { chunkNarration } from '@/lib/audio/speechEngine'
+import { chunkForLanguage, langMatchesVoice, speechLangTag } from '@/lib/audio/speechLocales'
 import { narrateLesson, narrateProject, narrateComponent, narrateCircuit } from '@/lib/audio/buildNarration'
 import { resolvePageNarration } from '@/lib/audio/resolvePageNarration'
+import { translateLabText } from '@/lib/audio/translateLabText'
 
 describe('female voice profiles', () => {
   it('defines exactly ten female-only speaking styles', () => {
@@ -28,6 +30,41 @@ describe('female voice profiles', () => {
     expect(looksFemaleVoice(voices[1]!)).toBe(true)
     const picked = pickFemaleVoice(voices, FEMALE_VOICE_PROFILES[0]!)
     expect(picked?.name).toBe('Samantha')
+  })
+
+  it('selects Japanese and Russian voices by language without falling back to English', () => {
+    const voices = [
+      { name: 'Samantha', lang: 'en-US', voiceURI: 'samantha', default: true, localService: true } as SpeechSynthesisVoice,
+      { name: 'Kyoko', lang: 'ja-JP', voiceURI: 'kyoko', default: false, localService: true } as SpeechSynthesisVoice,
+      { name: 'Milena', lang: 'ru-RU', voiceURI: 'milena', default: false, localService: true } as SpeechSynthesisVoice,
+    ]
+    expect(pickFemaleVoice(voices, FEMALE_VOICE_PROFILES[1]!, 'ja')?.name).toBe('Kyoko')
+    expect(pickFemaleVoice(voices, FEMALE_VOICE_PROFILES[1]!, 'ru')?.name).toBe('Milena')
+    expect(pickFemaleVoice(voices, FEMALE_VOICE_PROFILES[1]!, 'my')).toBeNull()
+  })
+})
+
+describe('speech locales', () => {
+  it('maps lab languages to speech tags and voice matching', () => {
+    expect(speechLangTag('my')).toBe('my-MM')
+    expect(langMatchesVoice('my-MM', 'my')).toBe(true)
+    expect(langMatchesVoice('ja_JP', 'ja')).toBe(true)
+    expect(chunkForLanguage('မင်္ဂလာပါ။ ကျေးဇူးတင်ပါတယ်။', 'my', 40).length).toBeGreaterThan(0)
+  })
+})
+
+describe('translateLabText', () => {
+  it('returns English unchanged and translates via gtx for other languages', async () => {
+    expect(await translateLabText('Hello lab', 'en')).toBe('Hello lab')
+
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => [[['မင်္ဂလာပါ', 'Hello lab']]],
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    expect(await translateLabText('Hello lab', 'my')).toContain('မင်္ဂလာပါ')
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain('tl=my')
+    vi.unstubAllGlobals()
   })
 })
 

@@ -14,15 +14,16 @@ import {
   DEFAULT_LAB_PREFERENCES,
   LAB_PREFERENCES_KEY,
   readLabPreferences,
+  type LabLanguageCode,
 } from '@/lib/studio/preferences'
 import { NarrationContext } from '@/hooks/narrationContext'
 
-function readVoiceId(): FemaleVoiceId {
-  return readLabPreferences(window.localStorage.getItem(LAB_PREFERENCES_KEY)).voiceId
+function readPrefs() {
+  return readLabPreferences(window.localStorage.getItem(LAB_PREFERENCES_KEY))
 }
 
 function writeVoiceId(voiceId: FemaleVoiceId): void {
-  const current = readLabPreferences(window.localStorage.getItem(LAB_PREFERENCES_KEY))
+  const current = readPrefs()
   window.localStorage.setItem(LAB_PREFERENCES_KEY, JSON.stringify({ ...current, voiceId }))
 }
 
@@ -34,7 +35,10 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
   const [activeTitle, setActiveTitle] = useState<string | null>(null)
   const [activePath, setActivePath] = useState<string | null>(null)
   const [voiceId, setVoiceIdState] = useState<FemaleVoiceId>(() =>
-    typeof window === 'undefined' ? DEFAULT_LAB_PREFERENCES.voiceId : readVoiceId(),
+    typeof window === 'undefined' ? DEFAULT_LAB_PREFERENCES.voiceId : readPrefs().voiceId,
+  )
+  const [language, setLanguage] = useState<LabLanguageCode>(() =>
+    typeof window === 'undefined' ? DEFAULT_LAB_PREFERENCES.language : readPrefs().language,
   )
 
   useEffect(() => {
@@ -42,6 +46,22 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
   }, [location.pathname])
 
   useEffect(() => () => stopSpeech(), [])
+
+  useEffect(() => {
+    const sync = () => {
+      const prefs = readPrefs()
+      setVoiceIdState(prefs.voiceId)
+      setLanguage(prefs.language)
+    }
+    window.addEventListener('storage', sync)
+    window.addEventListener('kyvon-lab-prefs', sync)
+    const timer = window.setInterval(sync, 800)
+    return () => {
+      window.removeEventListener('storage', sync)
+      window.removeEventListener('kyvon-lab-prefs', sync)
+      window.clearInterval(timer)
+    }
+  }, [])
 
   const pathMatches = activePath === location.pathname
   const liveStatus: SpeechStatus = pathMatches ? status : 'idle'
@@ -51,6 +71,7 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
   const setVoiceId = useCallback((id: FemaleVoiceId) => {
     setVoiceIdState(id)
     writeVoiceId(id)
+    window.dispatchEvent(new Event('kyvon-lab-prefs'))
   }, [])
 
   const listen = useCallback(
@@ -59,12 +80,15 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
         setStatus('unsupported')
         return
       }
+      const prefs = readPrefs()
+      setLanguage(prefs.language)
       setActivePath(location.pathname)
       setActiveId(id)
       setActiveTitle(title)
       void speakNarration({
         text,
-        voiceId,
+        voiceId: prefs.voiceId,
+        language: prefs.language,
         onStatus: (next) => {
           setStatus(next)
           if (next === 'idle') {
@@ -75,7 +99,7 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
         },
       })
     },
-    [supported, voiceId, location.pathname],
+    [supported, location.pathname],
   )
 
   const listenToPage = useCallback(() => {
@@ -108,6 +132,7 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
       activeId: liveId,
       activeTitle: liveTitle,
       voiceId,
+      language,
       setVoiceId,
       listen,
       listenToPage,
@@ -121,6 +146,7 @@ export function NarrationProvider({ children }: { readonly children: ReactNode }
       liveId,
       liveTitle,
       voiceId,
+      language,
       setVoiceId,
       listen,
       listenToPage,
