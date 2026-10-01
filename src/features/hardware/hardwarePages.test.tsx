@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { NarrationProvider } from '@/hooks/NarrationProvider'
 import { ProgressProvider } from '@/hooks/ProgressProvider'
+import { InspectorProvider } from '@/hooks/InspectorProvider'
 import { ComponentsPage } from '@/features/hardware/ComponentsPage'
 import { ComponentDetailPage } from '@/features/hardware/ComponentDetailPage'
 
@@ -24,22 +25,27 @@ describe('ComponentsPage', () => {
 })
 
 describe('ComponentDetailPage', () => {
-  it('renders pin table and safety for a known slug', () => {
+  it('renders pin table and safety for a known slug', async () => {
+    const user = userEvent.setup()
     render(
       <ProgressProvider>
         <MemoryRouter initialEntries={['/components/dht11']}>
           <NarrationProvider>
-            <Routes>
-              <Route path="/components/:slug" element={<ComponentDetailPage />} />
-            </Routes>
+            <InspectorProvider>
+              <Routes>
+                <Route path="/components/:slug" element={<ComponentDetailPage />} />
+              </Routes>
+            </InspectorProvider>
           </NarrationProvider>
         </MemoryRouter>
       </ProgressProvider>,
     )
 
     expect(screen.getByRole('heading', { name: /DHT11/i })).toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'Pinout' }))
     expect(screen.getByRole('table', { name: /Pin table for DHT11/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Safety' })).toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'Electrical Limits' }))
+    expect(screen.getByRole('heading', { name: 'Safety limits' })).toBeInTheDocument()
   })
 
   it('shows not found for unknown slugs', () => {
@@ -47,9 +53,11 @@ describe('ComponentDetailPage', () => {
       <ProgressProvider>
         <MemoryRouter initialEntries={['/components/nope']}>
           <NarrationProvider>
-            <Routes>
-              <Route path="/components/:slug" element={<ComponentDetailPage />} />
-            </Routes>
+            <InspectorProvider>
+              <Routes>
+                <Route path="/components/:slug" element={<ComponentDetailPage />} />
+              </Routes>
+            </InspectorProvider>
           </NarrationProvider>
         </MemoryRouter>
       </ProgressProvider>,

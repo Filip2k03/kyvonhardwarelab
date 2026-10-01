@@ -54,6 +54,6 @@ describe('AppRouter', () => {
 
   it('resolves component detail slug routes', () => {
     renderAt('/components/dht11')
-    expect(screen.getByRole('heading', { name: /DHT11/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /DHT11/i })).toBeInTheDocument()
   })
 })

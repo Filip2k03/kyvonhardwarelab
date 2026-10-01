@@ -1,51 +1,50 @@
 import { useMemo, useState } from 'react'
 import { listHardware } from '@/data/hardware'
 import { filterHardware } from '@/lib/hardware/filterHardware'
+import { DIFFICULTIES, DIFFICULTY_LABELS } from '@/lib/hardware/labels'
 import {
-  DIFFICULTIES,
-  DIFFICULTY_LABELS,
-  HARDWARE_CATEGORIES,
-  HARDWARE_CATEGORY_LABELS,
-} from '@/lib/hardware/labels'
-import type { Difficulty, HardwareCategory } from '@/types/hardware'
+  EXPLORER_GROUPS,
+  componentMatchesExplorerGroup,
+  type ExplorerGroupId,
+} from '@/lib/hardware/explorerGroups'
+import type { Difficulty } from '@/types/hardware'
 import { ComponentCard } from '@/features/hardware/ComponentCard'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { LabPanel } from '@/components/ui/LabPanel'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { cn } from '@/lib/cn'
 
-type CategoryFilter = HardwareCategory | 'all'
 type DifficultyFilter = Difficulty | 'all'
 
 export function ComponentsPage() {
   const [query, setQuery] = useState('')
-  const [category, setCategory] = useState<CategoryFilter>('all')
+  const [group, setGroup] = useState<ExplorerGroupId>('all')
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all')
 
-  const results = useMemo(
-    () =>
-      filterHardware(listHardware(), {
-        query,
-        category,
-        difficulty,
-      }),
-    [query, category, difficulty],
-  )
+  const results = useMemo(() => {
+    const base = filterHardware(listHardware(), {
+      query,
+      category: 'all',
+      difficulty,
+    })
+    return base.filter((component) => componentMatchesExplorerGroup(component.category, group))
+  }, [query, group, difficulty])
 
   return (
     <div className="space-y-6">
       <PageHeader
         eyebrow="Kit encyclopedia"
         title="Components"
-        description="Searchable encyclopedia of the KYVON physical kit. Content is typed data — pages render catalog records rather than hard-coded copy."
+        description="Engineering catalog of the KYVON physical kit. Open a part for pinout, electrical limits, wiring diagrams, firmware excerpts, and related experiments."
       />
 
       <LabPanel>
         <form
-          className="grid gap-3 sm:grid-cols-3"
+          className="grid gap-3"
           role="search"
           onSubmit={(event) => event.preventDefault()}
         >
-          <label className="flex flex-col gap-1 sm:col-span-3">
+          <label className="flex flex-col gap-1">
             <span className="text-xs font-medium text-[var(--color-text-muted)]">Search</span>
             <input
               type="search"
@@ -57,40 +56,64 @@ export function ComponentsPage() {
             />
           </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-xs font-medium text-[var(--color-text-muted)]">Category</span>
-            <select
-              value={category}
-              onChange={(event) => setCategory(event.target.value as CategoryFilter)}
-              className="min-h-11 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-bg)] px-3 text-sm"
-            >
-              <option value="all">All categories</option>
-              {HARDWARE_CATEGORIES.map((value) => (
-                <option key={value} value={value}>
-                  {HARDWARE_CATEGORY_LABELS[value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <fieldset>
+            <legend className="text-xs font-medium text-[var(--color-text-muted)]">Family</legend>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                type="button"
+                aria-pressed={group === 'all'}
+                className={cn(
+                  'min-h-10 rounded-[var(--radius-sm)] border px-3 text-xs',
+                  group === 'all'
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent-strong)]'
+                    : 'border-[var(--color-border)] text-[var(--color-text-muted)]',
+                )}
+                onClick={() => setGroup('all')}
+              >
+                All
+              </button>
+              {EXPLORER_GROUPS.map((item) => {
+                const selected = group === item.id
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={selected}
+                    className={cn(
+                      'min-h-10 rounded-[var(--radius-sm)] border px-3 text-xs',
+                      selected
+                        ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent-strong)]'
+                        : 'border-[var(--color-border)] text-[var(--color-text-muted)]',
+                    )}
+                    onClick={() => setGroup(item.id)}
+                  >
+                    {item.label}
+                  </button>
+                )
+              })}
+            </div>
+          </fieldset>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-xs font-medium text-[var(--color-text-muted)]">Difficulty</span>
-            <select
-              value={difficulty}
-              onChange={(event) => setDifficulty(event.target.value as DifficultyFilter)}
-              className="min-h-11 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-bg)] px-3 text-sm"
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-[var(--color-text-muted)]">Difficulty</span>
+              <select
+                value={difficulty}
+                onChange={(event) => setDifficulty(event.target.value as DifficultyFilter)}
+                className="min-h-11 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-bg)] px-3 text-sm"
+              >
+                <option value="all">All difficulties</option>
+                {DIFFICULTIES.map((value) => (
+                  <option key={value} value={value}>
+                    {DIFFICULTY_LABELS[value]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p
+              className="self-end font-mono-tech text-xs text-[var(--color-text-muted)]"
+              aria-live="polite"
             >
-              <option value="all">All difficulties</option>
-              {DIFFICULTIES.map((value) => (
-                <option key={value} value={value}>
-                  {DIFFICULTY_LABELS[value]}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <div className="flex items-end">
-            <p className="font-mono-tech text-xs text-[var(--color-text-muted)]" aria-live="polite">
               {results.length} result{results.length === 1 ? '' : 's'}
             </p>
           </div>
@@ -100,7 +123,7 @@ export function ComponentsPage() {
       {results.length === 0 ? (
         <EmptyState
           title="No components match"
-          description="Try a broader search or clear category/difficulty filters."
+          description="Try a broader search or clear family/difficulty filters."
         />
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2">

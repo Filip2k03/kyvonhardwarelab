@@ -157,9 +157,9 @@ export function InspectorPanel() {
   const panel = (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
-        <h2 className="font-mono-tech text-xs tracking-[0.12em] text-[var(--color-text-muted)] uppercase">
+        <p className="font-mono-tech text-xs tracking-[0.12em] text-[var(--color-text-muted)] uppercase">
           {title}
-        </h2>
+        </p>
         <button
           type="button"
           className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] xl:hidden"

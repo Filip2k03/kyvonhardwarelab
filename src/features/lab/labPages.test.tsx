@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { ProgressProvider } from '@/hooks/ProgressProvider'
 import { NarrationProvider } from '@/hooks/NarrationProvider'
+import { InspectorProvider } from '@/hooks/InspectorProvider'
 import { LabPage } from '@/features/lab/LabPage'
 import { CircuitPage } from '@/features/lab/CircuitPage'
 import { PROGRESS_STORAGE_KEY } from '@/lib/progress/validateProgress'
@@ -13,10 +14,12 @@ function renderLab(path: string) {
     <ProgressProvider>
       <MemoryRouter initialEntries={[path]}>
         <NarrationProvider>
-          <Routes>
-            <Route path="/lab" element={<LabPage />} />
-            <Route path="/lab/circuits/:slug" element={<CircuitPage />} />
-          </Routes>
+          <InspectorProvider>
+            <Routes>
+              <Route path="/lab" element={<LabPage />} />
+              <Route path="/lab/circuits/:slug" element={<CircuitPage />} />
+            </Routes>
+          </InspectorProvider>
         </NarrationProvider>
       </MemoryRouter>
     </ProgressProvider>,
